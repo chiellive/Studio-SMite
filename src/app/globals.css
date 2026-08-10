@@ -1,0 +1,418 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Registered so the Konami rainbow override can interpolate them smoothly. */
+@property --neon {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #00f0ff;
+}
+@property --neon-alt {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #8b5cf6;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-display);
+  --font-display: var(--font-display);
+  --color-neon: var(--neon);
+  --color-neon-alt: var(--neon-alt);
+  --color-carbon: var(--carbon);
+  --color-carbon-light: var(--carbon-light);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+  --animate-led: led 2.4s ease-in-out infinite;
+  --animate-sheen: sheen 8s ease-in-out infinite;
+  --animate-float: float 11s ease-in-out infinite;
+  --animate-scan: scan 9s linear infinite;
+  --animate-caret: caret 1.05s steps(1) infinite;
+  --animate-orbit: orbit 30s linear infinite;
+}
+
+/*
+ * "Obsidian Dark Mode". The site is dark-only, so :root and .dark carry the
+ * same values and <html> always ships the `dark` class.
+ */
+:root,
+.dark {
+  --neon: #00f0ff;
+  --neon-alt: #8b5cf6;
+
+  --background: #09090b;
+  --foreground: #f4f4f6;
+
+  --carbon: #0c0c10;
+  --carbon-light: #131318;
+
+  --card: #0c0c10;
+  --card-foreground: #f4f4f6;
+  --popover: #0b0b0f;
+  --popover-foreground: #f4f4f6;
+
+  --primary: #00f0ff;
+  --primary-foreground: #04141a;
+  --secondary: #17171d;
+  --secondary-foreground: #f4f4f6;
+  --muted: #141419;
+  --muted-foreground: #8b8b98;
+  --accent: #17171d;
+  --accent-foreground: #f4f4f6;
+  --destructive: #f4506b;
+
+  --border: oklch(1 0 0 / 9%);
+  --input: oklch(1 0 0 / 12%);
+  --ring: var(--neon);
+
+  --chart-1: #00f0ff;
+  --chart-2: #8b5cf6;
+  --chart-3: #22d3ee;
+  --chart-4: #a78bfa;
+  --chart-5: #38bdf8;
+
+  --radius: 0.75rem;
+
+  --sidebar: #0c0c10;
+  --sidebar-foreground: #f4f4f6;
+  --sidebar-primary: var(--neon);
+  --sidebar-primary-foreground: #04141a;
+  --sidebar-accent: #17171d;
+  --sidebar-accent-foreground: #f4f4f6;
+  --sidebar-border: oklch(1 0 0 / 9%);
+  --sidebar-ring: var(--neon);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply font-sans;
+    scroll-behavior: smooth;
+    /* The fixed header should never cover an anchor target. */
+    scroll-padding-top: 6rem;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--neon) 30%, transparent);
+    color: #ffffff;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #09090b;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #26262e;
+    border-radius: 999px;
+    border: 2px solid #09090b;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in oklab, var(--neon) 45%, #26262e);
+  }
+
+  /* The bespoke cursor ring replaces the pointer on precise-pointer devices. */
+  @media (hover: hover) and (pointer: fine) {
+    html.has-custom-cursor,
+    html.has-custom-cursor * {
+      cursor: none !important;
+    }
+  }
+}
+
+@layer components {
+  .glass-panel {
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in oklab, #ffffff 5%, transparent),
+        color-mix(in oklab, #ffffff 1.5%, transparent)
+      ),
+      color-mix(in oklab, var(--carbon) 82%, transparent);
+    backdrop-filter: blur(14px) saturate(135%);
+    -webkit-backdrop-filter: blur(14px) saturate(135%);
+    border: 1px solid color-mix(in oklab, #ffffff 10%, transparent);
+    box-shadow:
+      0 1px 0 0 color-mix(in oklab, #ffffff 8%, transparent) inset,
+      0 30px 80px -40px color-mix(in oklab, var(--neon) 45%, transparent),
+      0 0 0 1px color-mix(in oklab, var(--neon) 6%, transparent);
+  }
+
+  /* Neon hairline that only lights up on hover/focus-within. */
+  .neon-edge {
+    position: relative;
+    isolation: isolate;
+  }
+  .neon-edge::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      135deg,
+      color-mix(in oklab, var(--neon) 75%, transparent),
+      transparent 42%,
+      transparent 58%,
+      color-mix(in oklab, var(--neon-alt) 75%, transparent)
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .neon-edge:hover::after,
+  .neon-edge:focus-visible::after,
+  .neon-edge:focus-within::after {
+    opacity: 1;
+  }
+
+  .text-gradient-neon {
+    background-image: linear-gradient(
+      110deg,
+      #ffffff 0%,
+      var(--neon) 32%,
+      #ffffff 52%,
+      var(--neon-alt) 78%,
+      #ffffff 100%
+    );
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: sheen 9s ease-in-out infinite;
+  }
+
+  .glow-cyan {
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--neon) 35%, transparent),
+      0 0 28px -6px color-mix(in oklab, var(--neon) 55%, transparent),
+      0 0 60px -20px color-mix(in oklab, var(--neon) 70%, transparent);
+  }
+
+  .hairline-grid {
+    background-image:
+      linear-gradient(
+        to right,
+        color-mix(in oklab, #ffffff 5%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in oklab, #ffffff 5%, transparent) 1px,
+        transparent 1px
+      );
+    background-size: 64px 64px;
+  }
+}
+
+@layer utilities {
+  .text-shadow-neon {
+    text-shadow:
+      0 0 24px color-mix(in oklab, var(--neon) 45%, transparent),
+      0 0 70px color-mix(in oklab, var(--neon-alt) 30%, transparent);
+  }
+
+  /* Fades a decorative layer out toward the edges of its box. */
+  .mask-fade-edges {
+    -webkit-mask-image: radial-gradient(
+      ellipse 75% 65% at 50% 40%,
+      #000 40%,
+      transparent 100%
+    );
+    mask-image: radial-gradient(
+      ellipse 75% 65% at 50% 40%,
+      #000 40%,
+      transparent 100%
+    );
+  }
+
+  .mask-fade-b {
+    -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  }
+}
+
+/* Konami code: ↑ ↑ ↓ ↓ ← → ← → B A */
+html.rainbow {
+  animation: rainbow-cycle 6s linear infinite;
+}
+html.rainbow body {
+  background:
+    radial-gradient(
+      1200px 700px at 50% -10%,
+      color-mix(in oklab, var(--neon) 16%, transparent),
+      transparent 70%
+    ),
+    var(--background);
+}
+html.rainbow .text-gradient-neon {
+  animation-duration: 2.4s;
+}
+html.rainbow .glass-panel,
+html.rainbow [data-slot="card"] {
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--neon) 60%, transparent),
+    0 0 45px -8px color-mix(in oklab, var(--neon) 70%, transparent),
+    0 0 90px -20px color-mix(in oklab, var(--neon-alt) 75%, transparent);
+}
+html.rainbow .neon-edge::after {
+  opacity: 1;
+}
+
+@keyframes rainbow-cycle {
+  0% {
+    --neon: #00f0ff;
+    --neon-alt: #8b5cf6;
+  }
+  20% {
+    --neon: #7cff5a;
+    --neon-alt: #00f0ff;
+  }
+  40% {
+    --neon: #ffd23f;
+    --neon-alt: #ff5ad2;
+  }
+  60% {
+    --neon: #ff5a6e;
+    --neon-alt: #ffd23f;
+  }
+  80% {
+    --neon: #c05aff;
+    --neon-alt: #5affd0;
+  }
+  100% {
+    --neon: #00f0ff;
+    --neon-alt: #8b5cf6;
+  }
+}
+
+@keyframes led {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.6);
+  }
+  50% {
+    opacity: 0.75;
+    box-shadow: 0 0 0 5px rgba(52, 211, 153, 0);
+  }
+}
+
+@keyframes sheen {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -18px, 0);
+  }
+}
+
+@keyframes scan {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(1200%);
+  }
+}
+
+@keyframes caret {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
