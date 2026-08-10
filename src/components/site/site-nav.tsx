@@ -43,8 +43,10 @@ export function SiteNav() {
     <header
       className={cn(
         "fixed inset-x-0 top-0 z-[120] transition-all duration-500",
+        // A blurred backdrop on a fixed bar has to be recomputed every scroll
+        // frame, so the blur stays small and the background does the work.
         scrolled
-          ? "border-b border-white/8 bg-background/72 backdrop-blur-xl"
+          ? "border-b border-white/8 bg-background/88 backdrop-blur-sm"
           : "border-b border-transparent bg-transparent",
       )}
     >
@@ -59,7 +61,7 @@ export function SiteNav() {
         </Link>
 
         <nav aria-label="Main" className="hidden md:block">
-          <ul className="flex items-center gap-1 rounded-full border border-white/8 bg-white/[0.03] p-1 backdrop-blur-md">
+          <ul className="flex items-center gap-1 rounded-full border border-white/8 bg-white/[0.03] p-1">
             {navItems.map((item) => {
               const active = pathname === item.href;
               return (
@@ -135,7 +137,7 @@ export function SiteNav() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden border-t border-white/8 bg-background/95 backdrop-blur-xl md:hidden"
+            className="overflow-hidden border-t border-white/8 bg-background/97 md:hidden"
           >
             <ul className="mx-auto flex w-full max-w-7xl flex-col gap-1 px-5 py-4">
               {navItems.map((item) => {

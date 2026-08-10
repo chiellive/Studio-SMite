@@ -9,9 +9,14 @@ import { cn } from "@/lib/utils";
  * Ambient backdrop: a static hairline grid, two slow colour blooms and a glow
  * that trails the cursor.
  *
- * The glow is a fixed-size circle moved with a transform rather than an
- * animated `background-position`, so the browser can keep it on the compositor
- * instead of repainting a full-screen gradient on every pointer move.
+ * Two deliberate choices keep scrolling smooth:
+ *
+ * 1. The glow is a fixed-size circle moved with a transform, not an animated
+ *    `background-position` on a full-screen gradient.
+ * 2. Pointer positions are converted using the container's *document* offset,
+ *    which only changes on layout. Measuring against the viewport would mean a
+ *    `getBoundingClientRect()` on every scroll frame, and that read is exactly
+ *    what makes a parallax hero stutter.
  */
 export function GridBackdrop({ className }: { className?: string }) {
   const calm = useReducedMotion();
@@ -28,25 +33,31 @@ export function GridBackdrop({ className }: { className?: string }) {
     const node = ref.current;
     if (!node) return;
 
-    // Cached so pointermove never forces a layout read.
-    let rect = node.getBoundingClientRect();
+    let left = 0;
+    let top = 0;
+
     const measure = () => {
-      rect = node.getBoundingClientRect();
+      const rect = node.getBoundingClientRect();
+      left = rect.left + window.scrollX;
+      top = rect.top + window.scrollY;
     };
 
     const onMove = (event: PointerEvent) => {
-      px.set(event.clientX - rect.left);
-      py.set(event.clientY - rect.top);
+      px.set(event.pageX - left);
+      py.set(event.pageY - top);
     };
 
+    measure();
+
+    // Fires on layout changes (fonts settling, orientation, resize), never on scroll.
+    const observer = new ResizeObserver(measure);
+    observer.observe(document.documentElement);
+
     window.addEventListener("pointermove", onMove, { passive: true });
-    window.addEventListener("scroll", measure, { passive: true });
-    window.addEventListener("resize", measure);
 
     return () => {
+      observer.disconnect();
       window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("scroll", measure);
-      window.removeEventListener("resize", measure);
     };
   }, [calm, px, py]);
 
@@ -61,15 +72,15 @@ export function GridBackdrop({ className }: { className?: string }) {
     >
       <div className="hairline-grid mask-fade-edges absolute inset-0 opacity-60" />
 
-      <div className="absolute -top-40 -left-32 size-[34rem] animate-float rounded-full bg-neon/12 blur-[120px]" />
+      <div className="absolute -top-40 -left-32 size-[30rem] animate-float rounded-full bg-neon/12 blur-[100px]" />
       <div
-        className="absolute -right-40 -bottom-24 size-[30rem] animate-float rounded-full bg-neon-alt/14 blur-[130px]"
+        className="absolute -right-40 -bottom-24 size-[26rem] animate-float rounded-full bg-neon-alt/14 blur-[100px]"
         style={{ animationDelay: "-5s" }}
       />
 
       {calm ? null : (
         <motion.div
-          className="absolute top-0 left-0 size-[900px] rounded-full will-change-transform"
+          className="absolute top-0 left-0 size-[720px] rounded-full will-change-transform"
           style={{
             x: gx,
             y: gy,

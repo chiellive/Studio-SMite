@@ -19,26 +19,21 @@ export function Hero() {
     offset: ["start start", "end start"],
   });
 
-  // Content drifts up slightly faster than the page for a depth effect.
-  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "38%"]);
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
-  const backdropY = useTransform(scrollYProgress, [0, 1], ["0%", "14%"]);
+  // Content drifts up slightly faster than the page for a depth effect. The
+  // backdrop deliberately does not move: translating a layer that holds two
+  // 120px blurs forces the browser to re-rasterise them on every frame.
+  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
 
   return (
     <section
       ref={ref}
       className="relative flex min-h-[100svh] items-center overflow-hidden pt-24 pb-20"
     >
-      <motion.div
-        aria-hidden
-        className="absolute inset-0"
-        style={calm ? undefined : { y: backdropY }}
-      >
-        <GridBackdrop />
-      </motion.div>
+      <GridBackdrop />
 
       <motion.div
-        className="relative mx-auto w-full max-w-7xl px-5 sm:px-8"
+        className="relative mx-auto w-full max-w-7xl px-5 sm:px-8 will-change-transform"
         style={calm ? undefined : { y: contentY, opacity: contentOpacity }}
       >
         <motion.div

@@ -64,7 +64,6 @@
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
   --animate-led: led 2.4s ease-in-out infinite;
-  --animate-sheen: sheen 8s ease-in-out infinite;
   --animate-float: float 11s ease-in-out infinite;
   --animate-scan: scan 9s linear infinite;
   --animate-caret: caret 1.05s steps(1) infinite;
@@ -226,20 +225,25 @@
     opacity: 1;
   }
 
+  /*
+   * Static on purpose. Animating background-position across clipped text
+   * repaints the whole glyph area every frame, which is the single most
+   * expensive thing on the page when it sits on a heading the size of the
+   * hero wordmark. In spectrum mode the colours still shift, because the
+   * gradient reads --neon directly.
+   */
   .text-gradient-neon {
     background-image: linear-gradient(
       110deg,
       #ffffff 0%,
-      var(--neon) 32%,
-      #ffffff 52%,
-      var(--neon-alt) 78%,
+      var(--neon) 34%,
+      #ffffff 56%,
+      var(--neon-alt) 82%,
       #ffffff 100%
     );
-    background-size: 220% 100%;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    animation: sheen 9s ease-in-out infinite;
   }
 
   .glow-cyan {
@@ -305,9 +309,6 @@ html.rainbow body {
     ),
     var(--background);
 }
-html.rainbow .text-gradient-neon {
-  animation-duration: 2.4s;
-}
 html.rainbow .glass-panel,
 html.rainbow [data-slot="card"] {
   box-shadow:
@@ -355,16 +356,6 @@ html.rainbow .neon-edge::after {
   50% {
     opacity: 0.75;
     box-shadow: 0 0 0 5px rgba(52, 211, 153, 0);
-  }
-}
-
-@keyframes sheen {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
   }
 }
 
