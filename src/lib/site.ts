@@ -42,21 +42,20 @@ export const plans = [
     standardPrice: "€650",
     note: null,
     summary: "Hosting, updates and repairs, plus 30% off the website build.",
-    // The two lines every comparison on the site is built from.
+    // What the build costs under this option. The yearly side of the
+    // comparison is composed from price + period, so it can never drift.
     upfront: "30% off the website build",
-    yearly: "€375 per year",
   },
   {
     id: "hosting",
     name: "Hosting only",
-    price: "from €100",
+    price: "from €150",
     period: "per year",
     standardPrice: null,
     note: "The exact price depends on your domain name.",
     summary:
       "Your website stays online. Repairs and changes are charged separately.",
     upfront: "Full price for the website build",
-    yearly: "from €100 per year",
   },
 ] as const;
 
