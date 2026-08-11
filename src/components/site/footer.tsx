@@ -86,7 +86,7 @@ export function Footer() {
               Navigate
             </h2>
             <ul className="mt-4 space-y-2.5">
-              {[...navItems, { href: "/#care", label: "Care package" }].map(
+              {[...navItems, { href: "/#aftercare", label: "Hosting & care" }].map(
                 (item) => (
                   <li key={item.href}>
                     <Link

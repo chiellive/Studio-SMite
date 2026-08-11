@@ -1,4 +1,4 @@
-import { CarePlan } from "@/components/home/care-plan";
+import { Aftercare } from "@/components/home/aftercare";
 import { CtaBand } from "@/components/home/cta-band";
 import { Hero } from "@/components/home/hero";
 import { Highlights } from "@/components/home/highlights";
@@ -12,7 +12,7 @@ export default function HomePage() {
       <Highlights />
       <Services />
       <Process />
-      <CarePlan />
+      <Aftercare />
       <CtaBand />
     </>
   );

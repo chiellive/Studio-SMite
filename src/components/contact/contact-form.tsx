@@ -15,8 +15,40 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { neonBurst } from "@/lib/confetti";
-import { carePlan, projectTypes, site } from "@/lib/site";
+import { plans, projectTypes, site } from "@/lib/site";
 import { cn } from "@/lib/utils";
+
+type AftercareOption = {
+  id: string;
+  name: string;
+  price: string | null;
+  standardPrice: string | null;
+  summary: string;
+};
+
+const aftercareOptions: AftercareOption[] = [
+  ...plans.map((plan) => ({
+    id: plan.id as string,
+    name: plan.name as string,
+    price: `${plan.price} ${plan.period}`,
+    standardPrice: plan.standardPrice as string | null,
+    summary: plan.summary as string,
+  })),
+  {
+    id: "unsure",
+    name: "Not sure yet",
+    price: null,
+    standardPrice: null,
+    summary: "Talk me through it and I will tell you which one fits.",
+  },
+];
+
+function aftercareLabel(id: string) {
+  if (!id) return "Not requested";
+  const option = aftercareOptions.find((entry) => entry.id === id);
+  if (!option) return "Not requested";
+  return option.price ? `${option.name} (${option.price})` : option.name;
+}
 
 /**
  * Optional POST target. When it is not set the form falls back to opening a
@@ -31,7 +63,7 @@ type Fields = {
   name: string;
   email: string;
   projectType: string;
-  wantsCarePlan: boolean;
+  aftercare: string;
   message: string;
 };
 
@@ -39,7 +71,7 @@ const EMPTY: Fields = {
   name: "",
   email: "",
   projectType: "",
-  wantsCarePlan: false,
+  aftercare: "",
   message: "",
 };
 
@@ -66,11 +98,7 @@ function buildMailto(fields: Fields) {
     `Name: ${fields.name}`,
     `Email: ${fields.email}`,
     `Looking for: ${fields.projectType}`,
-    `${carePlan.name}: ${
-      fields.wantsCarePlan
-        ? `Yes, ${carePlan.price} ${carePlan.period}`
-        : "Not requested"
-    }`,
+    `Aftercare: ${aftercareLabel(fields.aftercare)}`,
     "",
     fields.message,
   ].join("\n");
@@ -279,63 +307,75 @@ export function ContactForm() {
               </Select>
             </Field>
 
-            <div>
-              <p className="text-sm leading-none font-medium">Aftercare</p>
+            <fieldset>
+              <legend className="text-sm leading-none font-medium">
+                Keeping it online afterwards
+              </legend>
               <p className="mt-1.5 text-xs text-muted-foreground">
-                Optional. You can always add it later.
+                Optional. You can always decide this later.
               </p>
 
-              <label
-                htmlFor="wantsCarePlan"
-                className={cn(
-                  "mt-3 flex cursor-pointer items-start gap-3.5 rounded-2xl border px-4 py-3.5 transition-all duration-300 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-neon/60",
-                  fields.wantsCarePlan
-                    ? "border-neon/45 bg-neon/12 shadow-[0_0_28px_-10px_var(--neon)]"
-                    : "border-white/10 bg-black/25 hover:border-white/25",
-                )}
-              >
-                <input
-                  id="wantsCarePlan"
-                  name="wantsCarePlan"
-                  type="checkbox"
-                  checked={fields.wantsCarePlan}
-                  onChange={(event) =>
-                    set("wantsCarePlan", event.target.checked)
-                  }
-                  className="sr-only"
-                />
+              <div className="mt-3 grid gap-2.5">
+                {aftercareOptions.map((option) => {
+                  const active = fields.aftercare === option.id;
+                  const inputId = `aftercare-${option.id}`;
 
-                <span
-                  aria-hidden
-                  className={cn(
-                    "mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-md border transition-colors duration-300",
-                    fields.wantsCarePlan
-                      ? "border-neon bg-neon text-[#04141a]"
-                      : "border-white/25 bg-transparent",
-                  )}
-                >
-                  {fields.wantsCarePlan ? (
-                    <Check className="size-3.5" strokeWidth={3} />
-                  ) : null}
-                </span>
+                  return (
+                    <label
+                      key={option.id}
+                      htmlFor={inputId}
+                      className={cn(
+                        "flex cursor-pointer items-start gap-3.5 rounded-2xl border px-4 py-3.5 transition-all duration-300 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-neon/60",
+                        active
+                          ? "border-neon/45 bg-neon/12 shadow-[0_0_28px_-10px_var(--neon)]"
+                          : "border-white/10 bg-black/25 hover:border-white/25",
+                      )}
+                    >
+                      <input
+                        id={inputId}
+                        type="radio"
+                        name="aftercare"
+                        value={option.id}
+                        checked={active}
+                        onChange={() => set("aftercare", option.id)}
+                        className="sr-only"
+                      />
 
-                <span className="min-w-0">
-                  <span className="flex flex-wrap items-baseline gap-x-2 text-sm font-medium">
-                    {carePlan.name}
-                    <span className="text-neon">
-                      {carePlan.price} {carePlan.period}
-                    </span>
-                    <span className="text-xs text-muted-foreground line-through decoration-muted-foreground/50">
-                      {carePlan.standardPrice}
-                    </span>
-                  </span>
-                  <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">
-                    {carePlan.summary} Tick this and I will include it in the
-                    quote.
-                  </span>
-                </span>
-              </label>
-            </div>
+                      <span
+                        aria-hidden
+                        className={cn(
+                          "mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border transition-colors duration-300",
+                          active
+                            ? "border-neon bg-neon"
+                            : "border-white/25 bg-transparent",
+                        )}
+                      >
+                        {active ? (
+                          <span className="size-2 rounded-full bg-[#04141a]" />
+                        ) : null}
+                      </span>
+
+                      <span className="min-w-0">
+                        <span className="flex flex-wrap items-baseline gap-x-2 text-sm font-medium">
+                          {option.name}
+                          {option.price ? (
+                            <span className="text-neon">{option.price}</span>
+                          ) : null}
+                          {option.standardPrice ? (
+                            <span className="text-xs text-muted-foreground line-through decoration-muted-foreground/50">
+                              {option.standardPrice}
+                            </span>
+                          ) : null}
+                        </span>
+                        <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">
+                          {option.summary}
+                        </span>
+                      </span>
+                    </label>
+                  );
+                })}
+              </div>
+            </fieldset>
 
             <Field
               id="message"

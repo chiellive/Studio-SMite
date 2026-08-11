@@ -29,13 +29,31 @@ export const projectTypes = [
   "Not sure yet",
 ] as const;
 
-/** The yearly aftercare offer. Quoted on the home page, the contact form and in the terminal. */
-export const carePlan = {
-  name: "Care package",
-  price: "€475",
-  period: "per year",
-  standardPrice: "€650",
-  summary: "Hosting, updates and repairs, handled all year.",
-} as const;
+/**
+ * The two yearly aftercare options. Quoted on the home page, in the contact
+ * form and in the terminal, so the prices only ever change in one place.
+ */
+export const plans = [
+  {
+    id: "care",
+    name: "Care package",
+    price: "€475",
+    period: "per year",
+    standardPrice: "€650",
+    note: null,
+    summary: "Hosting, updates and repairs, all looked after for you.",
+  },
+  {
+    id: "hosting",
+    name: "Hosting only",
+    price: "from €100",
+    period: "per year",
+    standardPrice: null,
+    note: "The exact price depends on your domain name.",
+    summary:
+      "Your website stays online. Repairs and changes are charged separately.",
+  },
+] as const;
 
+export type PlanId = (typeof plans)[number]["id"];
 export type ProjectType = (typeof projectTypes)[number];

@@ -5,7 +5,7 @@ import { TerminalSquare, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { carePlan, site } from "@/lib/site";
+import { plans, site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 type Line = {
@@ -113,27 +113,38 @@ export function CommandTerminal({
             text: "[ACTIVE]  Websites built from scratch, for your business",
           },
           { kind: "dim", text: "[SOON]    Logo and brand design" },
-          { kind: "dim", text: `Run "pricing" for the yearly care package.` },
+          { kind: "dim", text: `Run "pricing" for the yearly aftercare rates.` },
         ],
       }),
     },
     pricing: {
-      summary: "Yearly care package rate",
-      run: () => ({
-        lines: [
-          {
-            kind: "ok",
-            text: `${carePlan.name.toUpperCase()}: ${carePlan.price} ${carePlan.period}`,
-          },
-          {
-            kind: "dim",
-            text: `Standard rate ${carePlan.standardPrice}. You pay ${carePlan.price}.`,
-          },
-          { kind: "out", text: "  · Hosting arranged and managed" },
-          { kind: "out", text: "  · Maintenance and updates" },
-          { kind: "out", text: "  · Kept working, fixed when it breaks" },
-        ],
-      }),
+      summary: "Yearly aftercare rates",
+      run: () => {
+        const [care, hosting] = plans;
+        return {
+          lines: [
+            {
+              kind: "ok",
+              text: `${care.name.toUpperCase()}: ${care.price} ${care.period}`,
+            },
+            {
+              kind: "dim",
+              text: `Standard rate ${care.standardPrice}. You pay ${care.price}.`,
+            },
+            { kind: "out", text: "  · Hosting arranged and managed" },
+            { kind: "out", text: "  · Maintenance and updates" },
+            { kind: "out", text: "  · Kept working, fixed when it breaks" },
+            { kind: "dim", text: "" },
+            {
+              kind: "ok",
+              text: `${hosting.name.toUpperCase()}: ${hosting.price} ${hosting.period}`,
+            },
+            { kind: "dim", text: hosting.note },
+            { kind: "out", text: "  · Hosting only, the site stays online" },
+            { kind: "out", text: "  · Repairs and changes charged separately" },
+          ],
+        };
+      },
     },
     stack: {
       summary: "Tools of the trade",
