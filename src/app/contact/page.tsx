@@ -9,21 +9,21 @@ import { site } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Get in touch with Studio SMITE. Tell me about your business and get a straight answer on what your website needs and what it costs, usually within a day.",
+    "Neem contact op met Studio SMITE. Vertel me over je bedrijf en krijg een duidelijk antwoord over wat je website nodig heeft en wat het kost, meestal binnen een dag.",
 };
 
 const steps = [
   {
-    title: "I read it myself",
-    body: "Your message comes straight to me. There is no sales team and no call centre in between.",
+    title: "Ik lees het zelf",
+    body: "Je bericht komt rechtstreeks bij mij terecht. Er zit geen verkoopsteam en geen callcenter tussen.",
   },
   {
-    title: "You get an honest answer",
-    body: "Usually within a day: whether I am the right fit, what I would suggest, and roughly what it costs.",
+    title: "Je krijgt een eerlijk antwoord",
+    body: "Meestal binnen een dag: of ik de juiste ben, wat ik zou voorstellen, en ongeveer wat het kost.",
   },
   {
-    title: "We agree the price",
-    body: "A fixed price and a clear finish date, both settled before any work starts.",
+    title: "We leggen de prijs vast",
+    body: "Een vaste prijs en een duidelijke einddatum, allebei afgesproken voor er werk begint.",
   },
 ];
 
@@ -44,15 +44,15 @@ export default function ContactPage() {
 
             <Reveal delay={0.06} y={20}>
               <h1 className="mt-5 font-display text-4xl leading-[1.05] font-bold text-balance sm:text-5xl md:text-6xl">
-                Let&apos;s build{" "}
-                <span className="text-gradient-neon">something sharp</span>.
+                Laten we iets{" "}
+                <span className="text-gradient-neon">straf</span> bouwen.
               </h1>
             </Reveal>
 
             <Reveal delay={0.12} y={20}>
               <p className="mt-6 max-w-md text-base leading-relaxed text-muted-foreground text-pretty">
-                Tell me what you have in mind. You do not need to know any of
-                the technical side, just what your business needs.
+                Vertel me wat je in gedachten hebt. Je hoeft niets van de
+                technische kant te weten, alleen wat jouw bedrijf nodig heeft.
               </p>
             </Reveal>
 
@@ -79,7 +79,7 @@ export default function ContactPage() {
             <Reveal delay={0.24}>
               <dl className="mt-10 space-y-3 border-t border-white/8 pt-8">
                 <div className="flex items-center gap-3 text-sm">
-                  <dt className="sr-only">Email</dt>
+                  <dt className="sr-only">E-mail</dt>
                   <Mail className="size-4 shrink-0 text-neon" />
                   <dd>
                     <a
@@ -91,15 +91,15 @@ export default function ContactPage() {
                   </dd>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
-                  <dt className="sr-only">Location</dt>
+                  <dt className="sr-only">Locatie</dt>
                   <MapPin className="size-4 shrink-0 text-neon" />
                   <dd className="text-muted-foreground">{site.location}</dd>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
-                  <dt className="sr-only">Response time</dt>
+                  <dt className="sr-only">Antwoordtijd</dt>
                   <Clock className="size-4 shrink-0 text-neon" />
                   <dd className="text-muted-foreground">
-                    Typical reply time: under 24 hours
+                    Meestal antwoord binnen 24 uur
                   </dd>
                 </div>
               </dl>

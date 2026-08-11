@@ -54,13 +54,13 @@ export function SiteNav() {
         <Link
           href="/"
           className="group flex items-center gap-2.5 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-neon/60"
-          aria-label="Studio SMITE home"
+          aria-label="Studio SMITE startpagina"
         >
           <LogoMark className="size-7 transition-transform duration-500 group-hover:rotate-[8deg]" />
           <Wordmark className="hidden text-[15px] sm:inline-block" />
         </Link>
 
-        <nav aria-label="Main" className="hidden md:block">
+        <nav aria-label="Hoofdnavigatie" className="hidden md:block">
           <ul className="flex items-center gap-1 rounded-full border border-white/8 bg-white/[0.03] p-1">
             {navItems.map((item) => {
               const active = pathname === item.href;
@@ -103,7 +103,7 @@ export function SiteNav() {
           <button
             type="button"
             onClick={openTerminal}
-            aria-label="Open command terminal"
+            aria-label="Open de commandoterminal"
             className="hidden items-center gap-2 rounded-full border border-white/8 bg-white/[0.03] px-3 py-1.5 font-mono text-[11px] text-muted-foreground transition-colors hover:border-neon/30 hover:text-foreground lg:flex"
           >
             <span>⌘K</span>
@@ -113,14 +113,14 @@ export function SiteNav() {
             href="/contact"
             className="neon-edge group hidden items-center gap-1.5 rounded-full border border-neon/25 bg-neon/10 px-4 py-1.5 text-sm font-medium text-foreground transition-all duration-300 hover:bg-neon/20 hover:shadow-[0_0_28px_-6px_var(--neon)] focus-visible:ring-2 focus-visible:ring-neon/60 focus-visible:outline-none sm:flex"
           >
-            Start a project
+            Start een project
             <ArrowUpRight className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </Link>
 
           <button
             type="button"
             onClick={() => setMenuOpen((open) => !open)}
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-label={menuOpen ? "Menu sluiten" : "Menu openen"}
             aria-expanded={menuOpen}
             className="rounded-lg border border-white/8 bg-white/[0.03] p-2 text-foreground transition-colors hover:border-neon/30 md:hidden"
           >
@@ -132,7 +132,7 @@ export function SiteNav() {
       <AnimatePresence>
         {menuOpen ? (
           <motion.nav
-            aria-label="Mobile"
+            aria-label="Mobiele navigatie"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
@@ -167,7 +167,7 @@ export function SiteNav() {
                   href="/contact"
                   className="flex items-center justify-center gap-1.5 rounded-lg border border-neon/25 bg-neon/10 px-4 py-3 font-medium text-foreground"
                 >
-                  Start a project
+                  Start een project
                   <ArrowUpRight className="size-4" />
                 </Link>
               </li>

@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, Loader2, Mail, Send } from "lucide-react";
+import Link from "next/link";
 import { useRef, useState } from "react";
 
 import { Input } from "@/components/ui/input";
@@ -42,24 +43,24 @@ const aftercareOptions: AftercareOption[] = [
   })),
   {
     id: "unsure",
-    name: "Not sure yet",
+    name: "Weet ik nog niet",
     price: null,
     standardPrice: null,
-    summary: "Talk me through it and I will tell you which one fits.",
+    summary: "Leg het me uit en ik zeg je welke van de twee bij jou past.",
   },
 ];
 
 function aftercareLabel(id: string) {
-  if (!id) return "Not requested";
+  if (!id) return "Niet gevraagd";
   const option = aftercareOptions.find((entry) => entry.id === id);
-  if (!option) return "Not requested";
+  if (!option) return "Niet gevraagd";
   return option.price ? `${option.name} (${option.price})` : option.name;
 }
 
 /**
- * Optional POST target. When it is not set the form falls back to opening a
- * fully prefilled email in the visitor's mail client, so a brief is never
- * silently dropped on the floor.
+ * Optioneel POST-adres. Staat het niet ingesteld, dan valt het formulier terug
+ * op een volledig ingevulde e-mail in het mailprogramma van de bezoeker, zodat
+ * een aanvraag nooit stilletjes verloren gaat.
  */
 const ENDPOINT = process.env.NEXT_PUBLIC_CONTACT_ENDPOINT;
 
@@ -88,40 +89,40 @@ const EMPTY: Fields = {
 function validate(fields: Fields) {
   const errors: Partial<Record<keyof Fields, string>> = {};
 
-  if (!fields.name.trim()) errors.name = "Tell me who you are.";
+  if (!fields.name.trim()) errors.name = "Laat weten wie je bent.";
   if (!fields.email.trim()) {
-    errors.email = "An email address is required.";
+    errors.email = "Een e-mailadres is nodig.";
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(fields.email.trim())) {
-    errors.email = "That address does not look right.";
+    errors.email = "Dat adres lijkt niet te kloppen.";
   }
-  if (!fields.projectType) errors.projectType = "Pick the closest match.";
+  if (!fields.projectType) errors.projectType = "Kies wat er het dichtst bij komt.";
 
-  // Without the care package the build carries the whole job, so its budget
-  // is the one thing needed to answer sensibly.
+  // Zonder zorgpakket is de bouw de hele opdracht, dus dat budget is het enige
+  // dat nodig is om er zinnig op te kunnen antwoorden.
   if (fields.aftercare === "hosting" && !fields.buildBudget) {
-    errors.buildBudget = "Pick a range so I can answer properly.";
+    errors.buildBudget = "Kies een vork zodat ik deftig kan antwoorden.";
   }
 
   if (fields.message.trim().length < 12) {
-    errors.message = "A sentence or two about what you need, please.";
+    errors.message = "Een zin of twee over wat je nodig hebt, graag.";
   }
 
   return errors;
 }
 
 function buildMailto(fields: Fields) {
-  const subject = `Website enquiry from ${fields.name}`;
+  const subject = `Website-aanvraag van ${fields.name}`;
   const body = [
-    `Name: ${fields.name}`,
-    `Email: ${fields.email}`,
-    `Looking for: ${fields.projectType}`,
-    `Aftercare: ${aftercareLabel(fields.aftercare)}`,
+    `Naam: ${fields.name}`,
+    `E-mail: ${fields.email}`,
+    `Op zoek naar: ${fields.projectType}`,
+    `Nazorg: ${aftercareLabel(fields.aftercare)}`,
     fields.aftercare === "hosting"
-      ? `Budget for the build: ${fields.buildBudget}`
+      ? `Budget voor de bouw: ${fields.buildBudget}`
       : null,
     fields.aftercare === "care"
-      ? `Five year prepay: ${
-          fields.prepayFiveYears ? "Interested" : "Not interested"
+      ? `Vijf jaar vooruit betalen: ${
+          fields.prepayFiveYears ? "Interesse" : "Geen interesse"
         }`
       : null,
     "",
@@ -150,8 +151,8 @@ export function ContactForm() {
     setErrors((current) => ({ ...current, [key]: undefined }));
   };
 
-  // Switching option drops whatever the other option had asked for, so a stale
-  // budget or prepay flag can never ride along in the email.
+  // Van optie wisselen wist wat de andere optie had gevraagd, zodat een oud
+  // budget of vinkje nooit kan meeliften in de e-mail.
   const chooseAftercare = (id: string) => {
     setFields((current) => ({
       ...current,
@@ -184,12 +185,12 @@ export function ContactForm() {
           body: JSON.stringify(fields),
         });
       } else {
-        // Give the transmit animation a beat before the mail client opens.
+        // Even tijd geven aan de verzendanimatie voor het mailprogramma opent.
         await new Promise((resolve) => window.setTimeout(resolve, 900));
         window.location.href = href;
       }
     } catch {
-      // Delivery still works through the mail client fallback below.
+      // Bezorging blijft werken via de mailterugval hieronder.
     }
 
     setStatus("sent");
@@ -242,13 +243,13 @@ export function ContactForm() {
             </motion.span>
 
             <h2 className="mt-7 font-display text-2xl font-semibold sm:text-3xl">
-              {ENDPOINT ? "Message received." : "Message ready to send."}
+              {ENDPOINT ? "Bericht ontvangen." : "Bericht klaar om te sturen."}
             </h2>
 
             <p className="mt-3 max-w-md text-sm leading-relaxed text-muted-foreground">
               {ENDPOINT
-                ? `Thanks ${fields.name.split(" ")[0]}, it arrived safely. You will get a reply from ${site.email}, usually within a day.`
-                : `Your email app has opened with everything already filled in. Press send there and it comes straight to ${site.email}.`}
+                ? `Bedankt ${fields.name.split(" ")[0]}, het is goed aangekomen. Je krijgt antwoord van ${site.email}, meestal binnen een dag.`
+                : `Je mailprogramma is geopend met alles al ingevuld. Druk daar op verzenden en het komt rechtstreeks bij ${site.email} terecht.`}
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -258,7 +259,7 @@ export function ContactForm() {
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-neon/25 bg-neon/10 px-6 py-3 text-sm font-medium text-foreground transition-all hover:bg-neon/20 hover:shadow-[0_0_30px_-8px_var(--neon)]"
                 >
                   <Mail className="size-4" />
-                  Open my email app again
+                  Open mijn mailprogramma opnieuw
                 </a>
               )}
               <button
@@ -266,7 +267,7 @@ export function ContactForm() {
                 onClick={reset}
                 className="inline-flex items-center justify-center rounded-full border border-white/12 bg-white/[0.03] px-6 py-3 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
               >
-                Send another message
+                Nog een bericht sturen
               </button>
             </div>
           </motion.div>
@@ -283,9 +284,9 @@ export function ContactForm() {
             <div className="grid gap-6 sm:grid-cols-2">
               <Field
                 id="name"
-                label="Your name"
+                label="Je naam"
                 error={errors.name}
-                hint="What should I call you?"
+                hint="Hoe mag ik je noemen?"
               >
                 <Input
                   id="name"
@@ -293,7 +294,7 @@ export function ContactForm() {
                   value={fields.name}
                   onChange={(event) => set("name", event.target.value)}
                   aria-invalid={Boolean(errors.name)}
-                  placeholder="Jane Doe"
+                  placeholder="Jan Peeters"
                   autoComplete="name"
                   className="h-11 bg-black/25 px-3.5"
                 />
@@ -301,9 +302,9 @@ export function ContactForm() {
 
               <Field
                 id="email"
-                label="Your email"
+                label="Je e-mailadres"
                 error={errors.email}
-                hint="Where I send the reply."
+                hint="Daar stuur ik het antwoord naartoe."
               >
                 <Input
                   id="email"
@@ -312,7 +313,7 @@ export function ContactForm() {
                   value={fields.email}
                   onChange={(event) => set("email", event.target.value)}
                   aria-invalid={Boolean(errors.email)}
-                  placeholder="jane@company.com"
+                  placeholder="jan@bedrijf.be"
                   autoComplete="email"
                   className="h-11 bg-black/25 px-3.5"
                 />
@@ -321,9 +322,9 @@ export function ContactForm() {
 
             <Field
               id="projectType"
-              label="What do you need?"
+              label="Wat heb je nodig?"
               error={errors.projectType}
-              hint="Closest match is fine."
+              hint="Wat er het dichtst bij komt volstaat."
             >
               <Select
                 value={fields.projectType}
@@ -334,7 +335,7 @@ export function ContactForm() {
                   aria-invalid={Boolean(errors.projectType)}
                   className="h-11 w-full bg-black/25 px-3.5 data-[size=default]:h-11"
                 >
-                  <SelectValue placeholder="Choose an option" />
+                  <SelectValue placeholder="Kies een optie" />
                 </SelectTrigger>
                 <SelectContent position="popper">
                   {projectTypes.map((type) => (
@@ -348,10 +349,10 @@ export function ContactForm() {
 
             <fieldset>
               <legend className="text-sm leading-none font-medium">
-                Keeping it online afterwards
+                Nadien online houden
               </legend>
               <p className="mt-1.5 text-xs text-muted-foreground">
-                Optional. You can always decide this later.
+                Optioneel. Je kan dit ook later nog beslissen.
               </p>
 
               <div className="mt-3 grid gap-2.5">
@@ -430,7 +431,7 @@ export function ContactForm() {
                         id="build-budget-label"
                         className="text-sm font-medium"
                       >
-                        Budget for building the website
+                        Budget om de website te bouwen
                       </p>
                       {errors.buildBudget ? (
                         <span role="alert" className="text-xs text-destructive">
@@ -440,8 +441,8 @@ export function ContactForm() {
                     </div>
 
                     <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
-                      Without the care package there is no discount on the
-                      build, so this is the part that decides what is possible.
+                      Zonder zorgpakket is er geen korting op de bouw, dus dit
+                      is het stuk dat bepaalt wat mogelijk is.
                     </p>
 
                     <div
@@ -518,9 +519,9 @@ export function ContactForm() {
                         {prepayOffer.headline}
                       </span>
                       <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">
-                        {prepayOffer.years} years at {plans[0].price} comes to{" "}
-                        {prepayOffer.total}, and the build costs you nothing on
-                        top. Tick this and I will quote it both ways.
+                        {prepayOffer.years} jaar aan {plans[0].price} komt op{" "}
+                        {prepayOffer.total}, en de bouw kost je daar bovenop
+                        niets. Vink dit aan en ik geef je beide prijzen.
                       </span>
                     </span>
                   </motion.label>
@@ -530,9 +531,9 @@ export function ContactForm() {
 
             <Field
               id="message"
-              label="Tell me about it"
+              label="Vertel er iets over"
               error={errors.message}
-              hint="In your own words. No technical detail needed."
+              hint="In je eigen woorden. Technische details hoeven niet."
             >
               <Textarea
                 id="message"
@@ -540,7 +541,7 @@ export function ContactForm() {
                 value={fields.message}
                 onChange={(event) => set("message", event.target.value)}
                 aria-invalid={Boolean(errors.message)}
-                placeholder="We run a small bakery and our website is old and slow. We would like something that shows our products, our opening hours and where to find us."
+                placeholder="We hebben een kleine bakkerij en onze website is oud en traag. We zouden graag iets hebben dat onze producten, onze openingsuren en waar we te vinden zijn duidelijk toont."
                 rows={5}
                 className="min-h-32 resize-y bg-black/25 px-3.5 py-3"
               />
@@ -578,7 +579,7 @@ export function ContactForm() {
                       className="relative flex items-center gap-2"
                     >
                       <Send className="size-4" />
-                      Send message
+                      Verstuur bericht
                     </motion.span>
                   ) : null}
 
@@ -592,7 +593,7 @@ export function ContactForm() {
                       className="relative flex items-center gap-2"
                     >
                       <Loader2 className="size-4 animate-spin" />
-                      Sending
+                      Bezig met verzenden
                     </motion.span>
                   ) : null}
 
@@ -610,14 +611,22 @@ export function ContactForm() {
                 </AnimatePresence>
               </motion.button>
 
-              <p className="text-xs leading-relaxed text-muted-foreground">
-                No newsletter, no spam, no sales calls.
-                <br className="hidden sm:block" /> Just a reply from me.
+              <p className="max-w-xs text-xs leading-relaxed text-muted-foreground">
+                Je gegevens gebruik ik enkel om op je vraag te antwoorden. Geen
+                nieuwsbrief, geen spam, geen verkooptelefoontjes. Lees hoe ik
+                ermee omga in de{" "}
+                <Link
+                  href="/privacybeleid"
+                  className="text-neon underline-offset-4 hover:underline"
+                >
+                  privacyverklaring
+                </Link>
+                .
               </p>
             </div>
 
             <p aria-live="polite" className="sr-only">
-              {status === "sending" ? "Sending your message" : ""}
+              {status === "sending" ? "Je bericht wordt verzonden" : ""}
             </p>
           </motion.form>
         )}

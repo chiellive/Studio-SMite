@@ -151,7 +151,7 @@ export function FxProvider({ children }: { children: React.ReactNode }) {
       </AnimatePresence>
 
       <div aria-live="polite" className="sr-only">
-        {rainbow ? "Spectrum mode enabled" : ""}
+        {rainbow ? "Spectrummodus ingeschakeld" : ""}
       </div>
     </FxContext.Provider>
   );

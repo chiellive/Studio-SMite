@@ -9,23 +9,23 @@ import { SectionHeading } from "@/components/site/section-heading";
 const steps = [
   {
     index: "01",
-    title: "We talk",
-    body: "A short call or a few emails about what your business needs from the site, who has to find it, and what a good result would look like for you.",
+    title: "We praten",
+    body: "Een kort gesprek of wat mails over wat jouw bedrijf nodig heeft van de site, wie hem moet vinden, en hoe een goed resultaat er voor jou uitziet.",
   },
   {
     index: "02",
-    title: "You see it early",
-    body: "You get a link to the real design in your own browser, well before it goes live. Say what you like and what you do not, and it gets changed.",
+    title: "Jij ziet het vroeg",
+    body: "Je krijgt een link naar het echte ontwerp in je eigen browser, ruim voordat het live gaat. Zeg wat je wel en niet goed vindt, en het wordt aangepast.",
   },
   {
     index: "03",
-    title: "I build it",
-    body: "The site gets built properly and checked on phones, tablets and computers, so it looks right and works wherever your customers open it.",
+    title: "Ik bouw het",
+    body: "De site wordt netjes gebouwd en getest op telefoons, tablets en computers, zodat hij er overal goed uitziet en werkt.",
   },
   {
     index: "04",
-    title: "We go live",
-    body: "Your site goes online, I check that it loads quickly and fix anything that needs it. The website and everything in it belongs to you.",
+    title: "We gaan live",
+    body: "Je site komt online, ik controleer of alles snel laadt en los meteen op wat nodig is. De website en alles erin is van jou.",
   },
 ];
 
@@ -52,9 +52,9 @@ export function Process() {
 
       <div className="relative mx-auto w-full max-w-7xl px-5 sm:px-8">
         <SectionHeading
-          eyebrow="How it works"
-          title="From first email to live website, in four steps."
-          description="No long meetings and no confusing paperwork. You see progress every week, and you always deal with the same person."
+          eyebrow="Hoe het werkt"
+          title="Van eerste mail tot live website, in vier stappen."
+          description="Geen lange vergaderingen en geen ingewikkelde papieren. Je ziet elke week vooruitgang, en je hebt steeds met dezelfde persoon te maken."
         />
 
         <div ref={ref} className="relative mt-16 pl-8 sm:pl-12">

@@ -7,23 +7,23 @@ import { SpotlightCard } from "@/components/site/spotlight-card";
 const principles = [
   {
     icon: Timer,
-    title: "Speed comes first",
-    body: "Every image and extra feature has to earn its place, so your site still opens quickly on a phone with a weak signal.",
+    title: "Snelheid komt eerst",
+    body: "Elke foto en elke extra moet zijn plaats verdienen, zodat je site ook op een telefoon met slecht bereik meteen opent.",
   },
   {
     icon: Eye,
-    title: "You always know where you stand",
-    body: "A clear plan, a fixed price before anything starts, and a link you can open any time to see how it is coming along.",
+    title: "Je weet altijd waar je staat",
+    body: "Een duidelijk plan, een vaste prijs voor er iets begint, en een link die je op elk moment kan openen om te zien hoever het staat.",
   },
   {
     icon: KeyRound,
-    title: "You own everything",
-    body: "The website, the domain and all the files are yours. You are never locked in, and you can take it elsewhere whenever you like.",
+    title: "Alles is van jou",
+    body: "De website, het domein en alle bestanden zijn van jou. Je zit nergens aan vast en kan er altijd mee naar iemand anders.",
   },
   {
     icon: Feather,
-    title: "Nothing you do not need",
-    body: "No add-ons piled on top of add-ons. Less to go wrong, less to update, and a site that still works fine in three years.",
+    title: "Niets dat je niet nodig hebt",
+    body: "Geen uitbreidingen bovenop uitbreidingen. Minder dat stuk kan gaan, minder om bij te werken, en een site die over drie jaar nog prima werkt.",
   },
 ];
 
@@ -37,9 +37,9 @@ export function Principles() {
 
       <div className="relative mx-auto w-full max-w-7xl px-5 sm:px-8">
         <SectionHeading
-          eyebrow="How I work"
-          title="Straightforward, on purpose."
-          description="A one-person studio only works if you can trust how it runs. So here are the rules I hold myself to."
+          eyebrow="Hoe ik werk"
+          title="Bewust rechttoe rechtaan."
+          description="Een eenmansstudio werkt alleen als je kan vertrouwen hoe het loopt. Daarom hieronder de regels waar ik mezelf aan hou."
         />
 
         <RevealList className="mt-14 grid gap-5 sm:grid-cols-2">

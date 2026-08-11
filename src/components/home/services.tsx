@@ -15,32 +15,32 @@ import { SectionHeading } from "@/components/site/section-heading";
 import { SpotlightCard } from "@/components/site/spotlight-card";
 
 const deliverables = [
-  "Business websites that turn visitors into customers",
-  "Online tools, forms and booking systems",
-  "Webshops and product pages",
-  "Rescues for sites that are slow or look dated",
+  "Zakelijke websites die bezoekers omzetten in klanten",
+  "Online tools, formulieren en boekingssystemen",
+  "Webshops en productpagina's",
+  "Reddingsacties voor sites die traag zijn of er verouderd uitzien",
 ];
 
 const capabilities = [
   {
     icon: Gauge,
-    title: "Quick to open",
-    body: "Most people give up on a slow page. Yours will not give them the chance.",
+    title: "Snel geladen",
+    body: "De meeste mensen haken af bij een trage pagina. Die kans krijgen ze bij jou niet.",
   },
   {
     icon: MousePointerClick,
-    title: "Easy to use",
-    body: "Clear buttons and obvious next steps, so visitors never have to stop and work it out.",
+    title: "Makkelijk in gebruik",
+    body: "Duidelijke knoppen en logische vervolgstappen, zodat bezoekers nooit hoeven na te denken.",
   },
   {
     icon: Users,
-    title: "Works for everyone",
-    body: "Readable text, proper contrast and full keyboard use, so nobody gets shut out.",
+    title: "Voor iedereen toegankelijk",
+    body: "Leesbare tekst, goed contrast en volledig bruikbaar met het toetsenbord, zodat niemand wordt buitengesloten.",
   },
   {
     icon: Search,
-    title: "Easy to find on Google",
-    body: "Set up correctly behind the scenes, so search engines can read your pages and show them.",
+    title: "Makkelijk vindbaar op Google",
+    body: "Correct opgezet achter de schermen, zodat zoekmachines je pagina's kunnen lezen en tonen.",
   },
 ];
 
@@ -49,14 +49,13 @@ export function Services() {
     <section id="services" className="relative scroll-mt-24 py-24 sm:py-32">
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-8">
         <SectionHeading
-          eyebrow="What I do"
+          eyebrow="Wat ik doe"
           title={
             <>
-              One thing, done{" "}
-              <span className="text-gradient-neon">properly</span>.
+              Eén ding, <span className="text-gradient-neon">goed gedaan</span>.
             </>
           }
-          description="I build websites. That is it. All of the attention goes into one job, which is why the result beats a bit of everything done at once."
+          description="Ik bouw websites. Meer niet. Alle aandacht gaat naar dat ene, en daarom is het resultaat beter dan wanneer alles een beetje tegelijk gebeurt."
         />
 
         <div className="mt-14 grid gap-5 lg:grid-cols-3">
@@ -69,18 +68,19 @@ export function Services() {
                   </span>
                   <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/25 bg-emerald-400/10 px-3 py-1 font-mono text-[10px] tracking-[0.18em] text-emerald-400 uppercase">
                     <span className="size-1.5 rounded-full bg-emerald-400" />
-                    Available now
+                    Beschikbaar nu
                   </span>
                 </div>
 
                 <h3 className="mt-6 font-display text-2xl leading-tight font-semibold text-balance sm:text-[1.75rem]">
-                  Websites built from scratch, for your business
+                  Websites op maat gebouwd, voor jouw bedrijf
                 </h3>
 
                 <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-                  Your site gets built around what your company actually needs,
-                  instead of squeezing you into a template someone else designed.
-                  Nothing is bolted on, so nothing slows it down.
+                  Je website wordt gebouwd rond wat jouw bedrijf echt nodig
+                  heeft, in plaats van je in een sjabloon te persen dat iemand
+                  anders ontworpen heeft. Niks wordt erbij geplakt, dus niks
+                  vertraagt de site.
                 </p>
 
                 <ul className="mt-7 grid gap-2.5 sm:grid-cols-2">
@@ -103,7 +103,7 @@ export function Services() {
                     href="/contact"
                     className="inline-flex items-center gap-1.5 text-sm font-medium text-neon transition-all hover:gap-2.5"
                   >
-                    Get a price
+                    Vraag een prijs
                     <ArrowUpRight className="size-4" />
                   </Link>
                 </div>
@@ -120,23 +120,23 @@ export function Services() {
                   </span>
                   <span className="inline-flex items-center gap-1.5 rounded-full border border-neon-alt/30 bg-neon-alt/10 px-3 py-1 font-mono text-[10px] tracking-[0.18em] text-neon-alt uppercase">
                     <Sparkles className="size-3" />
-                    Coming soon
+                    Binnenkort
                   </span>
                 </div>
 
                 <h3 className="mt-6 font-display text-2xl leading-tight font-semibold text-balance">
-                  Logo and brand design
+                  Logo- en huisstijlontwerp
                 </h3>
 
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                  Your logo, colours, fonts and the way your business sounds in
-                  writing. In the works right now, and it opens to clients once
-                  it is as good as the websites.
+                  Je logo, kleuren, lettertypes en de manier waarop jouw bedrijf
+                  schrijft. Hier wordt nu aan gewerkt, en het wordt beschikbaar
+                  zodra het net zo goed is als de websites.
                 </p>
 
                 <div className="mt-auto pt-9">
                   <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 font-mono text-[11px] tracking-[0.14em] text-muted-foreground uppercase">
-                    Expanding scope
+                    Uitbreidend aanbod
                   </span>
                 </div>
               </div>

@@ -9,19 +9,19 @@ import { plans, prepayOffer } from "@/lib/site";
 const [care, hosting] = plans;
 
 const careIncludes = [
-  "30% off the price of building your website",
-  "Hosting and domain arranged and managed for you",
-  "Security updates, plus the small text and photo changes that come up",
-  "If something breaks, I fix it, at no extra cost",
+  "30% korting op de prijs om je website te bouwen",
+  "Hosting en domein geregeld en beheerd voor jou",
+  "Beveiligingsupdates, plus de kleine tekst- en foto-aanpassingen die opduiken",
+  "Gaat er iets stuk, dan los ik het op, zonder extra kosten",
 ];
 
-const hostingIncludes = ["Your website is hosted and stays online"];
+const hostingIncludes = ["Je website wordt gehost en blijft online"];
 const hostingExtras = [
-  "Something breaks and needs fixing",
-  "Changes to text, photos or pages",
+  "Iets gaat stuk en moet hersteld worden",
+  "Aanpassingen aan tekst, foto's of pagina's",
 ];
 
-/** The two rows that make the trade-off between the options readable at a glance. */
+/** De twee regels die het verschil tussen beide opties in één oogopslag leesbaar maken. */
 function CostSplit({
   upfront,
   yearly,
@@ -35,7 +35,7 @@ function CostSplit({
     <dl className="mt-6 overflow-hidden rounded-xl border border-white/8 bg-black/25">
       <div className="flex items-baseline justify-between gap-4 border-b border-white/8 px-4 py-3">
         <dt className="font-mono text-[10px] tracking-[0.16em] text-muted-foreground uppercase">
-          To build it
+          Om te bouwen
         </dt>
         <dd
           className={
@@ -49,7 +49,7 @@ function CostSplit({
       </div>
       <div className="flex items-baseline justify-between gap-4 px-4 py-3">
         <dt className="font-mono text-[10px] tracking-[0.16em] text-muted-foreground uppercase">
-          Every year after
+          Elk jaar erna
         </dt>
         <dd
           className={
@@ -70,14 +70,14 @@ export function Aftercare() {
     <section id="aftercare" className="relative scroll-mt-24 py-24 sm:py-32">
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-8">
         <SectionHeading
-          eyebrow="Aftercare"
+          eyebrow="Nazorg"
           title={
             <>
-              Built once, then{" "}
-              <span className="text-gradient-neon">kept running</span>.
+              Eén keer gebouwd, daarna{" "}
+              <span className="text-gradient-neon">bijgehouden</span>.
             </>
           }
-          description="Two ways to do this, and the difference is simply when you pay. Take the care package and building the site costs less, but you pay a bit more each year. Take hosting only and the build costs full price, but the years after are as cheap as they get."
+          description="Twee manieren om dit aan te pakken, het verschil zit in wanneer je betaalt. Kies je voor het zorgpakket, dan kost de bouw minder maar betaal je jaarlijks iets meer. Kies je voor enkel hosting, dan betaal je de volle prijs voor de bouw, maar zijn de jaren erna zo goedkoop mogelijk."
         />
 
         <div className="mt-14 grid items-start gap-5 lg:grid-cols-2">
@@ -90,12 +90,12 @@ export function Aftercare() {
                     {care.name}
                   </span>
                   <span className="inline-flex items-center rounded-full border border-emerald-400/25 bg-emerald-400/10 px-2.5 py-0.5 font-mono text-[10px] tracking-[0.14em] text-emerald-400 uppercase">
-                    Most chosen
+                    Meest gekozen
                   </span>
                 </div>
 
                 <p className="mt-6 font-display text-lg font-medium">
-                  Cheapest way to get started.
+                  Goedkoopste manier om te starten.
                 </p>
 
                 <div className="mt-4 flex items-end gap-3">
@@ -112,7 +112,7 @@ export function Aftercare() {
                     {care.standardPrice} {care.period}
                   </span>
                   <span className="rounded-full border border-emerald-400/25 bg-emerald-400/10 px-2.5 py-0.5 font-mono text-[10px] tracking-[0.14em] text-emerald-400 uppercase">
-                    Discounted rate
+                    Afgeprijsd tarief
                   </span>
                 </p>
 
@@ -143,9 +143,9 @@ export function Aftercare() {
                   <p className="text-sm leading-relaxed">
                     <span className="font-medium">{prepayOffer.headline}</span>
                     <span className="mt-1 block text-xs text-muted-foreground">
-                      {prepayOffer.years} years at {care.price} comes to{" "}
-                      {prepayOffer.total}, and building the website costs you
-                      nothing on top of that.
+                      {prepayOffer.years} jaar aan {care.price} komt op{" "}
+                      {prepayOffer.total}, en de bouw van je website kost je
+                      daar bovenop niets.
                     </span>
                   </p>
                 </div>
@@ -155,7 +155,7 @@ export function Aftercare() {
                     href="/contact"
                     className="group inline-flex items-center gap-1.5 rounded-full border border-neon/25 bg-neon/10 px-6 py-3 font-medium text-foreground transition-all duration-300 hover:bg-neon/20 hover:shadow-[0_0_32px_-8px_var(--neon)]"
                   >
-                    Ask about the care package
+                    Vraag naar het zorgpakket
                     <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </Link>
                 </div>
@@ -175,7 +175,7 @@ export function Aftercare() {
                 </div>
 
                 <p className="mt-6 font-display text-lg font-medium">
-                  Cheapest to keep running.
+                  Goedkoopst om draaiende te houden.
                 </p>
 
                 <div className="mt-4 flex items-end gap-3">
@@ -219,7 +219,7 @@ export function Aftercare() {
                       <span className="text-muted-foreground">
                         {item}
                         <span className="block text-xs text-muted-foreground/70">
-                          Charged separately
+                          Apart gefactureerd
                         </span>
                       </span>
                     </li>
@@ -228,10 +228,10 @@ export function Aftercare() {
 
                 <div className="mt-7 rounded-xl border border-white/8 bg-black/25 p-4">
                   <p className="text-xs leading-relaxed text-muted-foreground">
-                    No discount on the build with this option, so it is the
-                    pricier way to start. It works out well if your site rarely
-                    changes and you would rather pay only when you actually need
-                    me.
+                    Geen korting op de bouw bij deze optie, dus het is de
+                    duurdere manier om te starten. Werkt goed als je site zelden
+                    verandert en je liever alleen betaalt wanneer je me echt
+                    nodig hebt.
                   </p>
                 </div>
 
@@ -240,7 +240,7 @@ export function Aftercare() {
                     href="/contact"
                     className="group inline-flex items-center gap-1.5 rounded-full border border-white/12 bg-white/[0.03] px-6 py-3 font-medium text-foreground transition-colors duration-300 hover:bg-white/[0.07]"
                   >
-                    Ask about hosting only
+                    Vraag naar enkel hosting
                     <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </Link>
                 </div>

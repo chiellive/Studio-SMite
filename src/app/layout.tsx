@@ -31,11 +31,11 @@ export const metadata: Metadata = {
   },
   description: site.description,
   keywords: [
-    "web development",
-    "web design",
-    "Next.js",
-    "creative studio",
-    "interactive websites",
+    "website laten maken",
+    "webdesign",
+    "website kleine onderneming",
+    "website op maat",
+    "webdesigner België",
     "Chiel Smets",
     "Studio SMITE",
   ],
@@ -43,6 +43,7 @@ export const metadata: Metadata = {
   creator: site.founder.name,
   openGraph: {
     type: "website",
+    locale: "nl_BE",
     title: `${site.name} | ${site.tagline}`,
     description: site.description,
     siteName: site.name,
@@ -63,7 +64,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="en"
+      lang="nl"
       className={`dark ${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-background text-foreground">

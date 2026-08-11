@@ -47,7 +47,7 @@ export function Hero() {
             <span className="relative inline-flex size-1.5 rounded-full bg-emerald-400" />
           </span>
           <span className="font-mono text-[11px] tracking-[0.16em] text-muted-foreground uppercase">
-            Available for new projects
+            Beschikbaar voor nieuwe projecten
           </span>
         </motion.div>
 
@@ -86,8 +86,9 @@ export function Hero() {
           transition={{ duration: 0.7, delay: 0.42, ease: EASE }}
           className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground text-pretty sm:text-lg"
         >
-          I build fast, good-looking websites for small businesses. Made from
-          scratch to fit your company, with no templates and no jargon.
+          Ik ben Chiel Smets, 23, student-zelfstandige uit België. Ik bouw
+          websites voor kleine bedrijven die een blijvende indruk achterlaten:
+          op maat gemaakt, snel, en zonder sjabloon.
         </motion.p>
 
         <motion.div
@@ -105,14 +106,14 @@ export function Hero() {
               className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/45 to-transparent transition-transform duration-700 group-hover:translate-x-full"
             />
             <Zap className="relative size-4 fill-current" />
-            <span className="relative">Launch Project</span>
+            <span className="relative">Start een project</span>
           </Link>
 
           <a
             href="#services"
             className="neon-edge group inline-flex items-center justify-center gap-2 rounded-full border border-white/12 bg-white/[0.03] px-7 py-3.5 font-medium text-foreground backdrop-blur-md transition-colors duration-300 hover:bg-white/[0.07] focus-visible:ring-2 focus-visible:ring-neon/60 focus-visible:outline-none"
           >
-            What we build
+            Wat ik bouw
             <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </a>
         </motion.div>
@@ -120,7 +121,7 @@ export function Hero() {
 
       <motion.a
         href="#services"
-        aria-label="Scroll to services"
+        aria-label="Scroll naar wat ik bouw"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.1, duration: 0.8 }}

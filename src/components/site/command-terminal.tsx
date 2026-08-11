@@ -14,8 +14,8 @@ type Line = {
 };
 
 const BANNER: Line[] = [
-  { kind: "ok", text: "SMITE//OS v1.0.0 interactive shell" },
-  { kind: "dim", text: `Type "help" for available commands. ESC to close.` },
+  { kind: "ok", text: "SMITE//OS v1.0.0 interactieve terminal" },
+  { kind: "dim", text: `Typ "help" voor de commando's. ESC om te sluiten.` },
 ];
 
 type CommandResult = {
@@ -52,73 +52,73 @@ export function CommandTerminal({
 
   const commands: Record<string, CommandSpec> = {
     help: {
-      summary: "List every command",
+      summary: "Toon alle commando's",
       run: () => ({
         lines: [
-          { kind: "dim", text: "AVAILABLE COMMANDS" },
+          { kind: "dim", text: "BESCHIKBARE COMMANDO'S" },
           ...Object.entries(commands)
             .filter(([, spec]) => !spec.hidden)
             .map(([name, spec]) => ({
               kind: "out" as const,
               text: `  ${name.padEnd(10)} ${spec.summary}`,
             })),
-          { kind: "dim", text: "  …and a few undocumented ones. Go poke around." },
+          { kind: "dim", text: "  …en een paar die er niet bij staan. Zoek maar." },
         ],
       }),
     },
     about: {
-      summary: "Who is behind Studio SMITE",
+      summary: "Wie er achter Studio SMITE zit",
       run: () => ({
         lines: [
           { kind: "ok", text: `${site.name}: ${site.tagline}` },
           {
             kind: "out",
-            text: `Founded by ${site.founder.name} (${site.founder.age}), ${site.founder.role}.`,
+            text: `Opgericht door ${site.founder.name} (${site.founder.age}), ${site.founder.role.toLowerCase()}.`,
           },
           {
             kind: "out",
-            text: "Fast, good-looking websites for small businesses, built from scratch.",
+            text: "Snelle, mooie websites voor kleine bedrijven, van nul gebouwd.",
           },
-          { kind: "dim", text: `Run "info" for the full story.` },
+          { kind: "dim", text: `Typ "info" voor het hele verhaal.` },
         ],
       }),
     },
     info: {
-      summary: "Open the Info page",
+      summary: "Open de Info-pagina",
       run: () => ({
-        lines: [{ kind: "ok", text: "→ routing to /info" }],
+        lines: [{ kind: "ok", text: "→ op weg naar /info" }],
         navigate: "/info",
       }),
     },
     contact: {
-      summary: "Open the contact form",
+      summary: "Open het contactformulier",
       run: () => ({
-        lines: [{ kind: "ok", text: "→ routing to /contact" }],
+        lines: [{ kind: "ok", text: "→ op weg naar /contact" }],
         navigate: "/contact",
       }),
     },
     home: {
-      summary: "Back to the home page",
+      summary: "Terug naar de startpagina",
       run: () => ({
-        lines: [{ kind: "ok", text: "→ routing to /" }],
+        lines: [{ kind: "ok", text: "→ op weg naar /" }],
         navigate: "/",
       }),
     },
-    services: {
-      summary: "What the studio ships",
+    diensten: {
+      summary: "Wat de studio maakt",
       run: () => ({
         lines: [
           {
             kind: "out",
-            text: "[ACTIVE]  Websites built from scratch, for your business",
+            text: "[NU]      Websites op maat gebouwd, voor jouw bedrijf",
           },
-          { kind: "dim", text: "[SOON]    Logo and brand design" },
-          { kind: "dim", text: `Run "pricing" for the yearly aftercare rates.` },
+          { kind: "dim", text: "[BINNENKORT] Logo- en huisstijlontwerp" },
+          { kind: "dim", text: `Typ "prijzen" voor de jaarlijkse nazorgtarieven.` },
         ],
       }),
     },
-    pricing: {
-      summary: "Yearly aftercare rates",
+    prijzen: {
+      summary: "Jaarlijkse nazorgtarieven",
       run: () => {
         const [care, hosting] = plans;
         return {
@@ -129,12 +129,12 @@ export function CommandTerminal({
             },
             {
               kind: "dim",
-              text: `Standard rate ${care.standardPrice}. You pay ${care.price}.`,
+              text: `Standaardtarief ${care.standardPrice}. Jij betaalt ${care.price}.`,
             },
-            { kind: "out", text: "  · 30% off the website build" },
-            { kind: "out", text: "  · Hosting arranged and managed" },
-            { kind: "out", text: "  · Maintenance and updates" },
-            { kind: "out", text: "  · Kept working, fixed when it breaks" },
+            { kind: "out", text: "  · 30% korting op de websitebouw" },
+            { kind: "out", text: "  · Hosting geregeld en beheerd" },
+            { kind: "out", text: "  · Onderhoud en updates" },
+            { kind: "out", text: "  · Blijft werken, hersteld als er iets stukgaat" },
             { kind: "warn", text: `  ★ ${prepayOffer.headline}` },
             { kind: "dim", text: "" },
             {
@@ -142,48 +142,54 @@ export function CommandTerminal({
               text: `${hosting.name.toUpperCase()}: ${hosting.price} ${hosting.period}`,
             },
             { kind: "dim", text: hosting.note },
-            { kind: "out", text: "  · Hosting only, the site stays online" },
-            { kind: "out", text: "  · Repairs and changes charged separately" },
-            { kind: "out", text: "  · No discount on the website build" },
+            { kind: "out", text: "  · Enkel hosting, de site blijft online" },
+            {
+              kind: "out",
+              text: "  · Herstellingen en aanpassingen apart gefactureerd",
+            },
+            { kind: "out", text: "  · Geen korting op de websitebouw" },
           ],
         };
       },
     },
+    email: {
+      summary: "Kopieer het e-mailadres",
+      run: () => {
+        void navigator.clipboard?.writeText(site.email).catch(() => {});
+        return {
+          lines: [
+            { kind: "ok", text: `${site.email} gekopieerd naar het klembord.` },
+          ],
+        };
+      },
+    },
+    clear: {
+      summary: "Maak het scherm leeg",
+      run: () => ({ clear: true }),
+    },
+    exit: {
+      summary: "Sluit deze terminal",
+      run: () => ({ close: true }),
+    },
     stack: {
-      summary: "Tools of the trade",
+      summary: "…",
+      hidden: true,
       run: () => ({
         lines: [
           {
             kind: "out",
             text: "Next.js · React · TypeScript · Tailwind CSS · Framer Motion",
           },
-          { kind: "dim", text: "Shipped on the edge. Measured in milliseconds." },
+          { kind: "dim", text: "Op de edge gezet. Gemeten in milliseconden." },
         ],
       }),
-    },
-    email: {
-      summary: "Copy the studio email",
-      run: () => {
-        void navigator.clipboard?.writeText(site.email).catch(() => {});
-        return {
-          lines: [{ kind: "ok", text: `${site.email} copied to clipboard.` }],
-        };
-      },
-    },
-    clear: {
-      summary: "Wipe the screen",
-      run: () => ({ clear: true }),
-    },
-    exit: {
-      summary: "Close this shell",
-      run: () => ({ close: true }),
     },
     rainbow: {
       summary: "…",
       hidden: true,
       run: () => ({
         lines: [
-          { kind: "warn", text: "OVERRIDE ACCEPTED. Engaging spectrum mode." },
+          { kind: "warn", text: "OVERRIDE AANVAARD. Spectrummodus ingeschakeld." },
         ],
         rainbow: true,
       }),
@@ -194,7 +200,7 @@ export function CommandTerminal({
       run: () => ({
         lines: [
           { kind: "dim", text: "↑ ↑ ↓ ↓ ← → ← → B A" },
-          { kind: "warn", text: "Try it anywhere on the site." },
+          { kind: "warn", text: "Probeer het ergens op de site." },
         ],
       }),
     },
@@ -203,7 +209,7 @@ export function CommandTerminal({
       hidden: true,
       run: () => ({
         lines: [
-          { kind: "out", text: "guest@smite, a person with excellent taste." },
+          { kind: "out", text: "gast@smite, iemand met uitstekende smaak." },
         ],
       }),
     },
@@ -212,8 +218,8 @@ export function CommandTerminal({
       hidden: true,
       run: () => ({
         lines: [
-          { kind: "warn", text: "guest is not in the sudoers file." },
-          { kind: "dim", text: "This incident has been reported. (It has not.)" },
+          { kind: "warn", text: "gast staat niet in het sudoers-bestand." },
+          { kind: "dim", text: "Dit incident is gemeld. (Niet waar.)" },
         ],
       }),
     },
@@ -222,8 +228,8 @@ export function CommandTerminal({
       hidden: true,
       run: () => ({
         lines: [
-          { kind: "out", text: "home/  info/  contact/  .secrets/" },
-          { kind: "dim", text: "permission denied: .secrets/" },
+          { kind: "out", text: "home/  info/  contact/  .geheimen/" },
+          { kind: "dim", text: "toegang geweigerd: .geheimen/" },
         ],
       }),
     },
@@ -251,8 +257,8 @@ export function CommandTerminal({
 
       if (!spec) {
         push([
-          { kind: "warn", text: `command not found: ${name}` },
-          { kind: "dim", text: `Try "help".` },
+          { kind: "warn", text: `commando niet gevonden: ${name}` },
+          { kind: "dim", text: `Probeer "help".` },
         ]);
         return;
       }
@@ -328,7 +334,7 @@ export function CommandTerminal({
         >
           <button
             type="button"
-            aria-label="Close terminal"
+            aria-label="Terminal sluiten"
             tabIndex={-1}
             onClick={() => onOpenChange(false)}
             className="absolute inset-0 cursor-default bg-black/75 backdrop-blur-sm"
@@ -337,7 +343,7 @@ export function CommandTerminal({
           <motion.div
             role="dialog"
             aria-modal="true"
-            aria-label="Studio SMITE command terminal"
+            aria-label="Studio SMITE commandoterminal"
             initial={{ opacity: 0, y: -14, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.98 }}
@@ -358,6 +364,7 @@ export function CommandTerminal({
               <span className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
                 smite@studio:/bin/sh
               </span>
+
               <div className="ml-auto flex items-center gap-2">
                 <kbd className="hidden rounded border border-white/10 bg-white/5 px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground sm:inline-block">
                   ESC
@@ -365,7 +372,7 @@ export function CommandTerminal({
                 <button
                   type="button"
                   onClick={() => onOpenChange(false)}
-                  aria-label="Close terminal"
+                  aria-label="Terminal sluiten"
                   className="rounded p-1 text-muted-foreground transition-colors hover:bg-white/10 hover:text-foreground"
                 >
                   <X className="size-3.5" />
@@ -391,7 +398,7 @@ export function CommandTerminal({
                 >
                   {line.kind === "prompt" ? (
                     <>
-                      <span className="text-neon-alt">guest@smite</span>
+                      <span className="text-neon-alt">gast@smite</span>
                       <span className="text-muted-foreground">:~$ </span>
                       {line.text}
                     </>
@@ -404,7 +411,7 @@ export function CommandTerminal({
 
             <div className="relative flex items-center gap-2 border-t border-white/10 bg-black/30 px-4 py-3 font-mono text-[13px]">
               <span aria-hidden className="text-neon-alt">
-                guest@smite
+                gast@smite
               </span>
               <span aria-hidden className="-ml-1.5 text-muted-foreground">
                 :~$
@@ -414,7 +421,7 @@ export function CommandTerminal({
                 value={value}
                 onChange={(event) => setValue(event.target.value)}
                 onKeyDown={onKeyDown}
-                aria-label="Terminal command input"
+                aria-label="Commandoregel van de terminal"
                 spellCheck={false}
                 autoComplete="off"
                 autoCapitalize="off"

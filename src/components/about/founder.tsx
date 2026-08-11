@@ -6,10 +6,10 @@ import { SectionHeading } from "@/components/site/section-heading";
 import { site } from "@/lib/site";
 
 const focus = [
-  "Websites that feel quick and smooth",
-  "Designs that work on any size of screen",
-  "The small details that make a site feel expensive",
-  "Keeping pages light so they open fast",
+  "Websites die snel en soepel aanvoelen",
+  "Ontwerpen die op elk schermformaat werken",
+  "De kleine details die een site duur doen lijken",
+  "Pagina's licht houden zodat ze meteen openen",
 ];
 
 export function Founder() {
@@ -17,14 +17,14 @@ export function Founder() {
     <section className="relative py-24 sm:py-32">
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-8">
         <SectionHeading
-          eyebrow="Founder"
+          eyebrow="Wie ik ben"
           title={
             <>
-              Meet{" "}
+              Dit is{" "}
               <span className="text-gradient-neon">{site.founder.name}</span>.
             </>
           }
-          description="One person, on purpose. Nothing gets passed between departments, and nothing gets lost between what you asked for and what you get."
+          description="Eén persoon, met opzet. Niets wordt doorgegeven tussen afdelingen, en er gaat niets verloren tussen wat je vraagt en wat je krijgt."
         />
 
         <div className="mt-14 grid items-start gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
@@ -64,10 +64,10 @@ export function Founder() {
               </div>
 
               <div className="absolute inset-x-5 bottom-5 flex items-center justify-between font-mono text-[10px] tracking-[0.18em] text-muted-foreground uppercase">
-                <span>Age {site.founder.age}</span>
+                <span>{site.founder.age} jaar</span>
                 <span className="flex items-center gap-1.5">
                   <span className="size-1.5 animate-led rounded-full bg-emerald-400" />
-                  Building
+                  Aan het bouwen
                 </span>
               </div>
             </div>
@@ -76,34 +76,35 @@ export function Founder() {
           <div>
             <Reveal>
               <p className="text-lg leading-relaxed text-foreground/90 text-pretty">
-                I am {site.founder.name}, {site.founder.age}, and I build
-                websites the way I wish more of them worked: quick, clear and
-                pleasant to use.
+                Ik ben {site.founder.name}, {site.founder.age} jaar,
+                student-zelfstandige uit België. Ik bouw websites zoals ik zou
+                willen dat er meer werkten: snel, duidelijk en aangenaam in
+                gebruik.
               </p>
             </Reveal>
 
             <Reveal delay={0.08}>
               <div className="mt-6 space-y-5 text-base leading-relaxed text-muted-foreground text-pretty">
                 <p>
-                  Studio SMITE started from a simple frustration. Far too many
-                  small business websites are slow, look like every other one,
-                  and were clearly put together from a template somebody
-                  outgrew years ago. Being young in this line of work is the
-                  advantage: I learned on the tools the web is moving toward,
-                  not the ones it is leaving behind.
+                  Studio SMITE begon uit een simpele ergernis. Veel te veel
+                  websites van kleine bedrijven zijn traag, lijken op elkaar, en
+                  komen duidelijk uit een sjabloon waar iemand jaren geleden al
+                  op uitgekeken was. Dat ik jong ben, is in dit vak net het
+                  voordeel: ik heb leren werken met wat het web nu wordt, niet
+                  met wat het achter zich laat.
                 </p>
                 <p>
-                  So your site is written from scratch, checked line by line,
-                  and timed for speed before it goes anywhere near the public.
-                  Small studio, high standards, and a very short distance
-                  between an idea and a working website.
+                  Daarom wordt jouw site van nul geschreven, regel per regel
+                  nagekeken, en op snelheid getest voor hij ook maar in de buurt
+                  van je klanten komt. Klein studio, hoge lat, en een heel korte
+                  weg tussen een idee en een werkende website.
                 </p>
               </div>
             </Reveal>
 
             <Reveal delay={0.14}>
               <h3 className="mt-10 font-mono text-[11px] tracking-[0.2em] text-neon uppercase">
-                What I focus on
+                Waar ik op focus
               </h3>
               <ul className="mt-4 grid gap-2.5 sm:grid-cols-2">
                 {focus.map((item) => (
@@ -127,7 +128,7 @@ export function Founder() {
                   href="/contact"
                   className="group inline-flex items-center justify-center gap-1.5 rounded-full border border-neon/25 bg-neon/10 px-6 py-3 font-medium text-foreground transition-all duration-300 hover:bg-neon/20 hover:shadow-[0_0_32px_-8px_var(--neon)]"
                 >
-                  Work with me
+                  Werk met mij
                   <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </Link>
                 <a

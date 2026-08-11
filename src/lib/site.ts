@@ -1,18 +1,52 @@
 export const site = {
   name: "Studio SMITE",
   shortName: "SMITE",
-  tagline: "We Build Digital Dominance",
+  tagline: "Websites die jouw naam groter maken",
   description:
-    "Studio SMITE builds fast, good-looking websites for small businesses. Made from scratch, easy to find on Google, and looked after all year. Founded by Chiel Smets.",
-  url: "https://studio-smite.dev",
+    "Studio SMITE bouwt snelle, mooie websites voor kleine bedrijven. Volledig op maat gemaakt, makkelijk vindbaar op Google, en het hele jaar door onderhouden. Opgericht door Chiel Smets.",
+  url: "https://studiosmite.com",
   email: "hello@studio-smite.dev",
-  location: "Belgium, working worldwide",
+  location: "België, wereldwijd actief",
   founder: {
     name: "Chiel Smets",
     age: 23,
-    role: "Founder & Lead Developer",
+    role: "Student-zelfstandige uit België",
   },
 } as const;
+
+/**
+ * Wettelijk verplichte ondernemingsgegevens.
+ *
+ * De inschrijving bij het ondernemingsloket is nog niet rond, dus adres,
+ * ondernemingsnummer en btw-nummer staan op null. De footer en de juridische
+ * pagina's tonen die regels dan gewoon niet en vallen terug op `pendingNote`.
+ * Vul ze hier in zodra ze bekend zijn en ze verschijnen overal tegelijk.
+ */
+type LegalInfo = {
+  tradeName: string;
+  legalName: string;
+  status: string;
+  address: string | null;
+  companyNumber: string | null;
+  vatNumber: string | null;
+  vatNote: string;
+  pendingNote: string;
+  jurisdiction: string | null;
+};
+
+export const legal: LegalInfo = {
+  tradeName: "Studio SMITE",
+  legalName: "Chiel Smets",
+  status: "student-zelfstandige",
+  address: null,
+  companyNumber: null,
+  vatNumber: null,
+  vatNote:
+    "BTW niet toepasselijk, vrijstellingsregeling kleine onderneming (art. 56bis Wbtw).",
+  pendingNote:
+    "De inschrijving bij het ondernemingsloket loopt. Het ondernemingsnummer en de btw-gegevens komen hier zodra ze toegekend zijn.",
+  jurisdiction: null,
+};
 
 export const navItems = [
   { href: "/", label: "Home", index: "01" },
@@ -20,62 +54,64 @@ export const navItems = [
   { href: "/contact", label: "Contact", index: "03" },
 ] as const;
 
-export const projectTypes = [
-  "A new website for my business",
-  "A refresh of the website I have",
-  "A webshop",
-  "A single page for a campaign",
-  "An online tool or booking system",
-  "Not sure yet",
+export const legalPages = [
+  { href: "/privacybeleid", label: "Privacyverklaring" },
+  { href: "/cookiebeleid", label: "Cookiebeleid" },
+  { href: "/algemene-voorwaarden", label: "Algemene voorwaarden" },
 ] as const;
 
-/**
- * The two yearly aftercare options. Quoted on the home page, in the contact
- * form and in the terminal, so the prices only ever change in one place.
- */
+export const projectTypes = [
+  "Een nieuwe website voor mijn bedrijf",
+  "Een opfrisbeurt van mijn huidige website",
+  "Een webshop",
+  "Eén pagina voor een campagne",
+  "Een online tool of boekingssysteem",
+  "Weet ik nog niet",
+] as const;
+
 export const plans = [
   {
     id: "care",
-    name: "Care package",
+    name: "Zorgpakket",
     price: "€375",
-    period: "per year",
+    period: "per jaar",
     standardPrice: "€650",
     note: null,
-    summary: "Hosting, updates and repairs, plus 30% off the website build.",
-    // What the build costs under this option. The yearly side of the
-    // comparison is composed from price + period, so it can never drift.
-    upfront: "30% off the website build",
+    summary: "Hosting, updates en herstellingen, plus 30% korting op de bouw.",
+    // Wat de bouw kost bij deze keuze. De jaarlijkse kant van de vergelijking
+    // wordt samengesteld uit price en period, zodat die nooit kan afwijken.
+    upfront: "30% korting op de websitebouw",
   },
   {
     id: "hosting",
-    name: "Hosting only",
-    price: "from €150",
-    period: "per year",
+    name: "Enkel hosting",
+    price: "vanaf €150",
+    period: "per jaar",
     standardPrice: null,
-    note: "The exact price depends on your domain name.",
+    note: "De exacte prijs hangt af van je domeinnaam.",
     summary:
-      "Your website stays online. Repairs and changes are charged separately.",
-    upfront: "Full price for the website build",
+      "Je website blijft online. Herstellingen en aanpassingen worden apart gefactureerd.",
+    upfront: "Volle prijs voor de websitebouw",
   },
 ] as const;
 
-/** Pay the care package up front for five years and the build costs nothing. */
+/** Betaal het zorgpakket vijf jaar vooruit en de bouw kost niets. */
 export const prepayOffer = {
   years: 5,
-  total: "€1,875",
-  headline: "Pay 5 years up front and the website build is free.",
+  total: "€1.875",
+  headline: "Betaal 5 jaar vooruit en de websitebouw is gratis.",
 } as const;
 
 /**
- * Shown on the contact form when someone picks hosting only, because then the
- * build is the whole job and its budget decides what is realistic.
+ * Verschijnt op het contactformulier zodra iemand voor enkel hosting kiest,
+ * want dan is de bouw de hele opdracht en bepaalt dat budget wat haalbaar is.
  */
 export const buildBudgets = [
-  "Under €1,500",
-  "€1,500 to €3,000",
-  "€3,000 to €5,000",
-  "€5,000 or more",
-  "I would rather discuss it",
+  "Minder dan €1.500",
+  "€1.500 tot €3.000",
+  "€3.000 tot €5.000",
+  "€5.000 of meer",
+  "Bespreek ik liever",
 ] as const;
 
 export type PlanId = (typeof plans)[number]["id"];

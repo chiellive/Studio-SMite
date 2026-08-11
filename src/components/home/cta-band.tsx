@@ -21,18 +21,19 @@ export function CtaBand() {
             <div className="relative">
               <span className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.24em] text-neon uppercase">
                 <span aria-hidden className="h-px w-6 bg-neon/50" />
-                Next slot open
+                Volgende plek vrij
               </span>
 
               <h2 className="mx-auto mt-5 max-w-3xl font-display text-3xl leading-[1.1] font-semibold text-balance sm:text-4xl md:text-5xl">
-                Got something worth{" "}
-                <span className="text-gradient-neon">building properly</span>?
+                Heb je iets dat het verdient om{" "}
+                <span className="text-gradient-neon">goed gebouwd</span> te
+                worden?
               </h2>
 
               <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted-foreground text-pretty">
-                Tell me what you have in mind. You will get a straight answer on
-                what it takes, how long it needs and what it costs, usually
-                within a day.
+                Vertel me wat je in gedachten hebt. Je krijgt een duidelijk
+                antwoord over wat er nodig is, hoelang het duurt en wat het
+                kost, meestal binnen een dag.
               </p>
 
               <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -45,7 +46,7 @@ export function CtaBand() {
                     className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/45 to-transparent transition-transform duration-700 group-hover:translate-x-full"
                   />
                   <Zap className="relative size-4 fill-current" />
-                  <span className="relative">Launch Project</span>
+                  <span className="relative">Start een project</span>
                 </Link>
 
                 <a

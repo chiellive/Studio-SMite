@@ -5,23 +5,23 @@ const stats = [
   {
     value: "100",
     unit: "/100",
-    label: "Speed score",
-    body: "Top marks on Google's own speed test. That is the target for every site before it goes live.",
+    label: "Snelheidsscore",
+    body: "De topscore op de snelheidstest van Google zelf. Dat is het doel voor elke site voor hij live gaat.",
   },
   {
     value: "0",
-    label: "Templates used",
-    body: "Every site is written from scratch for your business, never bought as a theme and reshaped to fit.",
+    label: "Sjablonen gebruikt",
+    body: "Elke site wordt van nul geschreven voor jouw bedrijf, nooit als kant-en-klaar thema gekocht en bijgeschaafd.",
   },
   {
-    value: "24h",
-    label: "Reply time",
-    body: "You hear back within a day. No call centre, no ticket number, no waiting a week.",
+    value: "24u",
+    label: "Antwoordtijd",
+    body: "Je hoort binnen een dag iets. Geen callcenter, geen ticketnummer, geen week wachten.",
   },
   {
     value: "1",
-    label: "Person you deal with",
-    body: "The person who plans your website is the person who builds it and answers the phone.",
+    label: "Persoon die je spreekt",
+    body: "Wie jouw website plant, is ook wie hem bouwt en wie je aan de lijn krijgt.",
   },
 ];
 
@@ -29,7 +29,7 @@ export function Stats() {
   return (
     <section className="relative py-6">
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-8">
-        <h2 className="sr-only">What you can expect</h2>
+        <h2 className="sr-only">Wat je mag verwachten</h2>
 
         <RevealList className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat) => (

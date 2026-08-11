@@ -1,22 +1,22 @@
 "use client";
 
-import { ChevronRight, Mail, TerminalSquare } from "lucide-react";
+import { ChevronRight, Mail, MessageSquare, TerminalSquare } from "lucide-react";
 import Link from "next/link";
 import { useSyncExternalStore } from "react";
 
 import { LogoMark, Wordmark } from "@/components/site/logo";
 import { useFx } from "@/components/site/fx-provider";
-import { navItems, site } from "@/lib/site";
+import { legal, legalPages, navItems, site } from "@/lib/site";
 
 function subscribeToClock(onTick: () => void) {
   const id = window.setInterval(onTick, 1000);
   return () => window.clearInterval(id);
 }
 
-// A formatted string, not a Date: identical values within the same second
-// compare equal, which is what useSyncExternalStore needs from a snapshot.
+// Een opgemaakte tekst, geen Date: identieke waarden binnen dezelfde seconde
+// zijn gelijk, en dat is wat useSyncExternalStore van een snapshot verwacht.
 function readClock() {
-  return new Date().toLocaleTimeString([], {
+  return new Date().toLocaleTimeString("nl-BE", {
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
@@ -25,8 +25,8 @@ function readClock() {
 }
 
 function LiveClock() {
-  // The server has no idea what the visitor's local time or timezone is, so
-  // it renders a placeholder and the real clock takes over after hydration.
+  // De server weet niet in welke tijdzone de bezoeker zit, dus die toont een
+  // plaatshouder en de echte klok neemt het over zodra de pagina geladen is.
   const time = useSyncExternalStore(subscribeToClock, readClock, () => null);
 
   const zone = time
@@ -40,7 +40,7 @@ function LiveClock() {
   return (
     <span
       className="font-mono text-xs tabular-nums text-muted-foreground"
-      aria-label="Current local time"
+      aria-label="Huidige lokale tijd"
     >
       {time ? (
         <>
@@ -51,6 +51,40 @@ function LiveClock() {
         <span className="opacity-0">00:00:00</span>
       )}
     </span>
+  );
+}
+
+/** Wettelijk verplichte ondernemingsgegevens, met punten als scheidingsteken. */
+function CompanyDetails() {
+  const parts = [
+    `${legal.tradeName}, ${legal.legalName}`,
+    legal.status,
+    legal.address,
+    legal.companyNumber ? `Ondernemingsnummer ${legal.companyNumber}` : null,
+    legal.vatNumber ? `BTW ${legal.vatNumber}` : legal.vatNote,
+  ].filter((part): part is string => Boolean(part));
+
+  return (
+    <div className="space-y-2">
+      <p className="text-xs leading-relaxed text-muted-foreground/80">
+        {parts.map((part, index) => (
+          <span key={part}>
+            {index > 0 ? (
+              <span aria-hidden className="mx-1.5 text-muted-foreground/40">
+                ·
+              </span>
+            ) : null}
+            {part}
+          </span>
+        ))}
+      </p>
+
+      {legal.companyNumber ? null : (
+        <p className="text-xs leading-relaxed text-muted-foreground/60">
+          {legal.pendingNote}
+        </p>
+      )}
+    </div>
   );
 }
 
@@ -66,39 +100,40 @@ export function Footer() {
       />
 
       <div className="mx-auto w-full max-w-7xl px-5 py-14 sm:px-8">
-        <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
           <div>
             <Link href="/" className="flex items-center gap-2.5">
               <LogoMark className="size-8" />
               <Wordmark className="text-lg" />
             </Link>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
-              Fast, good-looking websites for small businesses. Built from
-              scratch, and looked after all year.
+              Snelle, mooie websites voor kleine bedrijven. Volledig op maat
+              gebouwd, en het hele jaar door onderhouden.
             </p>
             <p className="mt-4 font-mono text-xs text-muted-foreground/70">
               {site.location}
             </p>
           </div>
 
-          <nav aria-label="Footer">
+          <nav aria-label="Voettekstnavigatie">
             <h2 className="font-mono text-[11px] tracking-[0.2em] text-muted-foreground uppercase">
-              Navigate
+              Navigeren
             </h2>
             <ul className="mt-4 space-y-2.5">
-              {[...navItems, { href: "/#aftercare", label: "Hosting & care" }].map(
-                (item) => (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      className="group inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-neon"
-                    >
-                      <ChevronRight className="size-3 -translate-x-1 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100" />
-                      {item.label}
-                    </Link>
-                  </li>
-                ),
-              )}
+              {[
+                ...navItems,
+                { href: "/#aftercare", label: "Hosting & nazorg" },
+              ].map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="group inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-neon"
+                  >
+                    <ChevronRight className="size-3 -translate-x-1 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100" />
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </nav>
 
@@ -119,18 +154,42 @@ export function Footer() {
               <li>
                 <Link
                   href="/contact"
-                  className="text-sm text-muted-foreground transition-colors hover:text-neon"
+                  className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-neon"
                 >
-                  Start a project
+                  <MessageSquare className="size-3.5" />
+                  Start een project
                 </Link>
               </li>
             </ul>
           </div>
+
+          <nav aria-label="Juridische informatie">
+            <h2 className="font-mono text-[11px] tracking-[0.2em] text-muted-foreground uppercase">
+              Juridisch
+            </h2>
+            <ul className="mt-4 space-y-2.5">
+              {legalPages.map((page) => (
+                <li key={page.href}>
+                  <Link
+                    href={page.href}
+                    className="group inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-neon"
+                  >
+                    <ChevronRight className="size-3 -translate-x-1 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100" />
+                    {page.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </div>
 
-        <div className="mt-12 flex flex-col-reverse items-start gap-4 border-t border-white/8 pt-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 border-t border-white/8 pt-6">
+          <CompanyDetails />
+        </div>
+
+        <div className="mt-6 flex flex-col-reverse items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-muted-foreground/70">
-            © {year} {site.name}. Built by {site.founder.name}.
+            © {year} {site.name}. Gebouwd door {site.founder.name}.
           </p>
 
           <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
@@ -140,7 +199,7 @@ export function Footer() {
                 <span className="relative inline-flex size-2 rounded-full bg-emerald-400 shadow-[0_0_10px_2px_rgba(52,211,153,0.7)]" />
               </span>
               <span className="font-mono text-xs tracking-wide text-emerald-400/90">
-                System Online
+                Systeem online
               </span>
             </span>
 
@@ -151,8 +210,8 @@ export function Footer() {
             <button
               type="button"
               onClick={openTerminal}
-              title="Open command terminal (⌘K / Ctrl+K)"
-              aria-label="Open command terminal"
+              title="Open de commandoterminal (Ctrl+K)"
+              aria-label="Open de commandoterminal"
               className="group rounded-md border border-white/8 bg-white/[0.03] p-1.5 text-muted-foreground transition-all hover:border-neon/40 hover:text-neon hover:shadow-[0_0_18px_-6px_var(--neon)]"
             >
               <TerminalSquare className="size-3.5" />
