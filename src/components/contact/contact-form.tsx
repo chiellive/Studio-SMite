@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { neonBurst } from "@/lib/confetti";
-import { budgetTiers, projectTypes, site } from "@/lib/site";
+import { carePlan, projectTypes, site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 /**
@@ -31,7 +31,7 @@ type Fields = {
   name: string;
   email: string;
   projectType: string;
-  budget: string;
+  wantsCarePlan: boolean;
   message: string;
 };
 
@@ -39,7 +39,7 @@ const EMPTY: Fields = {
   name: "",
   email: "",
   projectType: "",
-  budget: "",
+  wantsCarePlan: false,
   message: "",
 };
 
@@ -66,7 +66,11 @@ function buildMailto(fields: Fields) {
     `Name: ${fields.name}`,
     `Email: ${fields.email}`,
     `Looking for: ${fields.projectType}`,
-    `Budget: ${fields.budget || "Not specified"}`,
+    `${carePlan.name}: ${
+      fields.wantsCarePlan
+        ? `Yes, ${carePlan.price} ${carePlan.period}`
+        : "Not requested"
+    }`,
     "",
     fields.message,
   ].join("\n");
@@ -275,44 +279,63 @@ export function ContactForm() {
               </Select>
             </Field>
 
-            <fieldset>
-              <legend
-                id="budget-label"
-                className="text-sm leading-none font-medium"
-              >
-                Rough budget
-              </legend>
+            <div>
+              <p className="text-sm leading-none font-medium">Aftercare</p>
               <p className="mt-1.5 text-xs text-muted-foreground">
-                Optional, but it helps me suggest something realistic.
+                Optional. You can always add it later.
               </p>
 
-              <div
-                role="radiogroup"
-                aria-labelledby="budget-label"
-                className="mt-3 flex flex-wrap gap-2"
+              <label
+                htmlFor="wantsCarePlan"
+                className={cn(
+                  "mt-3 flex cursor-pointer items-start gap-3.5 rounded-2xl border px-4 py-3.5 transition-all duration-300 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-neon/60",
+                  fields.wantsCarePlan
+                    ? "border-neon/45 bg-neon/12 shadow-[0_0_28px_-10px_var(--neon)]"
+                    : "border-white/10 bg-black/25 hover:border-white/25",
+                )}
               >
-                {budgetTiers.map((tier) => {
-                  const active = fields.budget === tier;
-                  return (
-                    <button
-                      key={tier}
-                      type="button"
-                      role="radio"
-                      aria-checked={active}
-                      onClick={() => set("budget", active ? "" : tier)}
-                      className={cn(
-                        "rounded-full border px-4 py-2 text-sm transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-neon/60",
-                        active
-                          ? "border-neon/45 bg-neon/15 text-foreground shadow-[0_0_24px_-8px_var(--neon)]"
-                          : "border-white/10 bg-black/25 text-muted-foreground hover:border-white/25 hover:text-foreground",
-                      )}
-                    >
-                      {tier}
-                    </button>
-                  );
-                })}
-              </div>
-            </fieldset>
+                <input
+                  id="wantsCarePlan"
+                  name="wantsCarePlan"
+                  type="checkbox"
+                  checked={fields.wantsCarePlan}
+                  onChange={(event) =>
+                    set("wantsCarePlan", event.target.checked)
+                  }
+                  className="sr-only"
+                />
+
+                <span
+                  aria-hidden
+                  className={cn(
+                    "mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-md border transition-colors duration-300",
+                    fields.wantsCarePlan
+                      ? "border-neon bg-neon text-[#04141a]"
+                      : "border-white/25 bg-transparent",
+                  )}
+                >
+                  {fields.wantsCarePlan ? (
+                    <Check className="size-3.5" strokeWidth={3} />
+                  ) : null}
+                </span>
+
+                <span className="min-w-0">
+                  <span className="flex flex-wrap items-baseline gap-x-2 text-sm font-medium">
+                    {carePlan.name}
+                    <span className="text-neon">
+                      {carePlan.price} {carePlan.period}
+                    </span>
+                    <span className="text-xs text-muted-foreground line-through decoration-muted-foreground/50">
+                      {carePlan.standardPrice}
+                    </span>
+                  </span>
+                  <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">
+                    {carePlan.summary} Tick this and I will include it in the
+                    quote.
+                  </span>
+                </span>
+              </label>
+            </div>
 
             <Field
               id="message"

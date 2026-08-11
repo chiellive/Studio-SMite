@@ -29,13 +29,13 @@ export const projectTypes = [
   "Not sure yet",
 ] as const;
 
-export const budgetTiers = [
-  "< €2k",
-  "€2k to €5k",
-  "€5k to €10k",
-  "€10k+",
-  "Not sure yet",
-] as const;
+/** The yearly aftercare offer. Quoted on the home page, the contact form and in the terminal. */
+export const carePlan = {
+  name: "Care package",
+  price: "€475",
+  period: "per year",
+  standardPrice: "€650",
+  summary: "Hosting, updates and repairs, handled all year.",
+} as const;
 
 export type ProjectType = (typeof projectTypes)[number];
-export type BudgetTier = (typeof budgetTiers)[number];

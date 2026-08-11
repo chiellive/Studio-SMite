@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Reveal } from "@/components/site/reveal";
 import { SectionHeading } from "@/components/site/section-heading";
 import { SpotlightCard } from "@/components/site/spotlight-card";
+import { carePlan } from "@/lib/site";
 
 const included = [
   {
@@ -43,21 +44,21 @@ export function CarePlan() {
             <div className="grid gap-10 p-7 sm:p-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-14">
               <div className="flex flex-col">
                 <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-neon/30 bg-neon/10 px-3 py-1 font-mono text-[10px] tracking-[0.18em] text-neon uppercase">
-                  Care plan
+                  {carePlan.name}
                 </span>
 
                 <div className="mt-6 flex items-end gap-3">
                   <span className="font-display text-6xl leading-none font-bold tracking-tight sm:text-7xl">
-                    <span className="text-gradient-neon">€475</span>
+                    <span className="text-gradient-neon">{carePlan.price}</span>
                   </span>
                   <span className="pb-1.5 text-sm text-muted-foreground">
-                    / year
+                    {carePlan.period}
                   </span>
                 </div>
 
                 <p className="mt-4 flex flex-wrap items-center gap-2.5 text-sm">
                   <span className="text-muted-foreground line-through decoration-muted-foreground/50">
-                    €650 per year
+                    {carePlan.standardPrice} {carePlan.period}
                   </span>
                   <span className="rounded-full border border-emerald-400/25 bg-emerald-400/10 px-2.5 py-0.5 font-mono text-[10px] tracking-[0.14em] text-emerald-400 uppercase">
                     Discounted rate
@@ -74,7 +75,7 @@ export function CarePlan() {
                     href="/contact"
                     className="group inline-flex items-center gap-1.5 rounded-full border border-neon/25 bg-neon/10 px-6 py-3 font-medium text-foreground transition-all duration-300 hover:bg-neon/20 hover:shadow-[0_0_32px_-8px_var(--neon)]"
                   >
-                    Ask about the care plan
+                    Ask about the care package
                     <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </Link>
                 </div>

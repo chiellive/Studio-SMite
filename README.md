@@ -55,8 +55,9 @@ src/
     confetti.ts        confetti bursts
 ```
 
-Copy that appears in more than one place (studio name, email, tagline, budget
-tiers) lives in `src/lib/site.ts`. Change it there once.
+Copy that appears in more than one place (studio name, email, tagline, and the
+care package price) lives in `src/lib/site.ts`. Change it there once and the
+home page, the contact form and the terminal all follow.
 
 ## Design tokens
 
@@ -82,7 +83,8 @@ NEXT_PUBLIC_CONTACT_ENDPOINT=https://your-endpoint.example/api/contact
 ```
 
 When that is set the form sends a JSON body with `name`, `email`,
-`projectType`, `budget` and `message`, and the success copy changes to match.
+`projectType`, `wantsCarePlan` (a boolean) and `message`, and the success copy
+changes to match.
 
 ## Hidden details
 
