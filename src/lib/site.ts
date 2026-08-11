@@ -37,11 +37,14 @@ export const plans = [
   {
     id: "care",
     name: "Care package",
-    price: "€475",
+    price: "€375",
     period: "per year",
     standardPrice: "€650",
     note: null,
-    summary: "Hosting, updates and repairs, all looked after for you.",
+    summary: "Hosting, updates and repairs, plus 30% off the website build.",
+    // The two lines every comparison on the site is built from.
+    upfront: "30% off the website build",
+    yearly: "€375 per year",
   },
   {
     id: "hosting",
@@ -52,8 +55,30 @@ export const plans = [
     note: "The exact price depends on your domain name.",
     summary:
       "Your website stays online. Repairs and changes are charged separately.",
+    upfront: "Full price for the website build",
+    yearly: "from €100 per year",
   },
+] as const;
+
+/** Pay the care package up front for five years and the build costs nothing. */
+export const prepayOffer = {
+  years: 5,
+  total: "€1,875",
+  headline: "Pay 5 years up front and the website build is free.",
+} as const;
+
+/**
+ * Shown on the contact form when someone picks hosting only, because then the
+ * build is the whole job and its budget decides what is realistic.
+ */
+export const buildBudgets = [
+  "Under €1,500",
+  "€1,500 to €3,000",
+  "€3,000 to €5,000",
+  "€5,000 or more",
+  "I would rather discuss it",
 ] as const;
 
 export type PlanId = (typeof plans)[number]["id"];
 export type ProjectType = (typeof projectTypes)[number];
+export type BuildBudget = (typeof buildBudgets)[number];

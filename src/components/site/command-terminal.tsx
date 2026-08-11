@@ -5,7 +5,7 @@ import { TerminalSquare, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { plans, site } from "@/lib/site";
+import { plans, prepayOffer, site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 type Line = {
@@ -131,9 +131,11 @@ export function CommandTerminal({
               kind: "dim",
               text: `Standard rate ${care.standardPrice}. You pay ${care.price}.`,
             },
+            { kind: "out", text: "  · 30% off the website build" },
             { kind: "out", text: "  · Hosting arranged and managed" },
             { kind: "out", text: "  · Maintenance and updates" },
             { kind: "out", text: "  · Kept working, fixed when it breaks" },
+            { kind: "warn", text: `  ★ ${prepayOffer.headline}` },
             { kind: "dim", text: "" },
             {
               kind: "ok",
@@ -142,6 +144,7 @@ export function CommandTerminal({
             { kind: "dim", text: hosting.note },
             { kind: "out", text: "  · Hosting only, the site stays online" },
             { kind: "out", text: "  · Repairs and changes charged separately" },
+            { kind: "out", text: "  · No discount on the website build" },
           ],
         };
       },

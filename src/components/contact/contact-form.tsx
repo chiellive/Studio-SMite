@@ -15,7 +15,13 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { neonBurst } from "@/lib/confetti";
-import { plans, projectTypes, site } from "@/lib/site";
+import {
+  buildBudgets,
+  plans,
+  prepayOffer,
+  projectTypes,
+  site,
+} from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 type AftercareOption = {
@@ -64,6 +70,8 @@ type Fields = {
   email: string;
   projectType: string;
   aftercare: string;
+  buildBudget: string;
+  prepayFiveYears: boolean;
   message: string;
 };
 
@@ -72,6 +80,8 @@ const EMPTY: Fields = {
   email: "",
   projectType: "",
   aftercare: "",
+  buildBudget: "",
+  prepayFiveYears: false,
   message: "",
 };
 
@@ -85,6 +95,13 @@ function validate(fields: Fields) {
     errors.email = "That address does not look right.";
   }
   if (!fields.projectType) errors.projectType = "Pick the closest match.";
+
+  // Without the care package the build carries the whole job, so its budget
+  // is the one thing needed to answer sensibly.
+  if (fields.aftercare === "hosting" && !fields.buildBudget) {
+    errors.buildBudget = "Pick a range so I can answer properly.";
+  }
+
   if (fields.message.trim().length < 12) {
     errors.message = "A sentence or two about what you need, please.";
   }
@@ -99,9 +116,19 @@ function buildMailto(fields: Fields) {
     `Email: ${fields.email}`,
     `Looking for: ${fields.projectType}`,
     `Aftercare: ${aftercareLabel(fields.aftercare)}`,
+    fields.aftercare === "hosting"
+      ? `Budget for the build: ${fields.buildBudget}`
+      : null,
+    fields.aftercare === "care"
+      ? `Five year prepay: ${
+          fields.prepayFiveYears ? "Interested" : "Not interested"
+        }`
+      : null,
     "",
     fields.message,
-  ].join("\n");
+  ]
+    .filter((line) => line !== null)
+    .join("\n");
 
   return `mailto:${site.email}?subject=${encodeURIComponent(
     subject,
@@ -121,6 +148,18 @@ export function ContactForm() {
   const set = <K extends keyof Fields>(key: K, value: Fields[K]) => {
     setFields((current) => ({ ...current, [key]: value }));
     setErrors((current) => ({ ...current, [key]: undefined }));
+  };
+
+  // Switching option drops whatever the other option had asked for, so a stale
+  // budget or prepay flag can never ride along in the email.
+  const chooseAftercare = (id: string) => {
+    setFields((current) => ({
+      ...current,
+      aftercare: id,
+      buildBudget: id === "hosting" ? current.buildBudget : "",
+      prepayFiveYears: id === "care" ? current.prepayFiveYears : false,
+    }));
+    setErrors((current) => ({ ...current, buildBudget: undefined }));
   };
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -337,7 +376,7 @@ export function ContactForm() {
                         name="aftercare"
                         value={option.id}
                         checked={active}
-                        onChange={() => set("aftercare", option.id)}
+                        onChange={() => chooseAftercare(option.id)}
                         className="sr-only"
                       />
 
@@ -375,6 +414,118 @@ export function ContactForm() {
                   );
                 })}
               </div>
+
+              <AnimatePresence initial={false} mode="wait">
+                {fields.aftercare === "hosting" ? (
+                  <motion.div
+                    key="budget"
+                    initial={{ opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="mt-4 rounded-2xl border border-white/10 bg-black/25 p-4"
+                  >
+                    <div className="flex items-baseline justify-between gap-3">
+                      <p
+                        id="build-budget-label"
+                        className="text-sm font-medium"
+                      >
+                        Budget for building the website
+                      </p>
+                      {errors.buildBudget ? (
+                        <span role="alert" className="text-xs text-destructive">
+                          {errors.buildBudget}
+                        </span>
+                      ) : null}
+                    </div>
+
+                    <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
+                      Without the care package there is no discount on the
+                      build, so this is the part that decides what is possible.
+                    </p>
+
+                    <div
+                      role="radiogroup"
+                      aria-labelledby="build-budget-label"
+                      className="mt-3 flex flex-wrap gap-2"
+                    >
+                      {buildBudgets.map((tier) => {
+                        const picked = fields.buildBudget === tier;
+                        return (
+                          <button
+                            key={tier}
+                            type="button"
+                            role="radio"
+                            aria-checked={picked}
+                            onClick={() => set("buildBudget", tier)}
+                            className={cn(
+                              "rounded-full border px-4 py-2 text-sm transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-neon/60",
+                              picked
+                                ? "border-neon/45 bg-neon/15 text-foreground shadow-[0_0_24px_-8px_var(--neon)]"
+                                : "border-white/10 bg-black/30 text-muted-foreground hover:border-white/25 hover:text-foreground",
+                            )}
+                          >
+                            {tier}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </motion.div>
+                ) : null}
+
+                {fields.aftercare === "care" ? (
+                  <motion.label
+                    key="prepay"
+                    htmlFor="prepayFiveYears"
+                    initial={{ opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.25 }}
+                    className={cn(
+                      "mt-4 flex cursor-pointer items-start gap-3.5 rounded-2xl border px-4 py-3.5 transition-colors duration-300 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-neon/60",
+                      fields.prepayFiveYears
+                        ? "border-neon/45 bg-neon/12"
+                        : "border-white/10 bg-black/25 hover:border-white/25",
+                    )}
+                  >
+                    <input
+                      id="prepayFiveYears"
+                      name="prepayFiveYears"
+                      type="checkbox"
+                      checked={fields.prepayFiveYears}
+                      onChange={(event) =>
+                        set("prepayFiveYears", event.target.checked)
+                      }
+                      className="sr-only"
+                    />
+
+                    <span
+                      aria-hidden
+                      className={cn(
+                        "mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-md border transition-colors duration-300",
+                        fields.prepayFiveYears
+                          ? "border-neon bg-neon text-[#04141a]"
+                          : "border-white/25 bg-transparent",
+                      )}
+                    >
+                      {fields.prepayFiveYears ? (
+                        <Check className="size-3.5" strokeWidth={3} />
+                      ) : null}
+                    </span>
+
+                    <span className="min-w-0">
+                      <span className="block text-sm font-medium">
+                        {prepayOffer.headline}
+                      </span>
+                      <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">
+                        {prepayOffer.years} years at {plans[0].price} comes to{" "}
+                        {prepayOffer.total}, and the build costs you nothing on
+                        top. Tick this and I will quote it both ways.
+                      </span>
+                    </span>
+                  </motion.label>
+                ) : null}
+              </AnimatePresence>
             </fieldset>
 
             <Field

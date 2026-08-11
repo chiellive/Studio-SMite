@@ -83,8 +83,13 @@ NEXT_PUBLIC_CONTACT_ENDPOINT=https://your-endpoint.example/api/contact
 ```
 
 When that is set the form sends a JSON body with `name`, `email`,
-`projectType`, `aftercare` (`care`, `hosting`, `unsure` or empty) and
-`message`, and the success copy changes to match.
+`projectType`, `aftercare` (`care`, `hosting`, `unsure` or empty),
+`buildBudget`, `prepayFiveYears` and `message`, and the success copy changes to
+match.
+
+`buildBudget` is only filled in when `aftercare` is `hosting`, and
+`prepayFiveYears` only when it is `care`. Switching between the two clears the
+other one, so a stale value can never be submitted.
 
 ## Hidden details
 
