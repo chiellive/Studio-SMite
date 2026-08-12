@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import dynamic from "next/dynamic";
 import {
   createContext,
   useCallback,
@@ -10,9 +11,26 @@ import {
   useState,
 } from "react";
 
-import { CommandTerminal } from "@/components/site/command-terminal";
-import { CursorRing } from "@/components/site/cursor-ring";
 import { rainbowBlast } from "@/lib/confetti";
+
+/*
+ * Allebei pas ophalen wanneer ze nodig zijn.
+ *
+ * De terminal verschijnt alleen na Ctrl+K en de cursorring alleen bij een
+ * echte muis, maar hun code werd wel op elke pagina meteen meegeladen en
+ * uitgevoerd. Dat werk viel precies samen met het moment waarop de bezoeker
+ * op de titel zit te wachten.
+ */
+const CommandTerminal = dynamic(
+  () =>
+    import("@/components/site/command-terminal").then((m) => m.CommandTerminal),
+  { ssr: false },
+);
+
+const CursorRing = dynamic(
+  () => import("@/components/site/cursor-ring").then((m) => m.CursorRing),
+  { ssr: false },
+);
 
 const KONAMI = [
   "ArrowUp",
@@ -52,11 +70,18 @@ function isTypingTarget(target: EventTarget | null) {
 
 export function FxProvider({ children }: { children: React.ReactNode }) {
   const [terminalOpen, setTerminalOpen] = useState(false);
+  // Blijft aan zodra de terminal een eerste keer opende: dan pas wordt zijn
+  // code opgehaald, en daarna blijft hij staan zodat sluiten en heropenen
+  // vloeiend gaat.
+  const [terminalUsed, setTerminalUsed] = useState(false);
   const [rainbow, setRainbow] = useState(false);
   const [flash, setFlash] = useState(false);
   const progress = useRef(0);
 
-  const openTerminal = useCallback(() => setTerminalOpen(true), []);
+  const openTerminal = useCallback(() => {
+    setTerminalUsed(true);
+    setTerminalOpen(true);
+  }, []);
 
   const enableRainbow = useCallback(() => {
     setRainbow(true);
@@ -84,6 +109,7 @@ export function FxProvider({ children }: { children: React.ReactNode }) {
       // Ctrl/Cmd + K toggles the shell from anywhere.
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
         event.preventDefault();
+        setTerminalUsed(true);
         setTerminalOpen((current) => !current);
         return;
       }
@@ -127,11 +153,13 @@ export function FxProvider({ children }: { children: React.ReactNode }) {
       {children}
 
       <CursorRing />
-      <CommandTerminal
-        open={terminalOpen}
-        onOpenChange={setTerminalOpen}
-        onRainbow={toggleRainbow}
-      />
+      {terminalUsed ? (
+        <CommandTerminal
+          open={terminalOpen}
+          onOpenChange={setTerminalOpen}
+          onRainbow={toggleRainbow}
+        />
+      ) : null}
 
       <AnimatePresence>
         {flash ? (

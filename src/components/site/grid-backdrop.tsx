@@ -87,10 +87,26 @@ export function GridBackdrop({ className }: { className?: string }) {
     >
       <div className="hairline-grid mask-fade-edges absolute inset-0 opacity-60" />
 
-      <div className="absolute -top-40 -left-32 size-[30rem] animate-float rounded-full bg-neon/12 blur-[100px]" />
+      {/*
+        Zachte kleurvlekken als verloop in plaats van een vervaagde cirkel.
+        Een blur van 100 pixels over een vlak van deze grootte moet de browser
+        echt uitrekenen, en dat kostte op een telefoon bijna 600 ms aan opmaak.
+        Een radiaal verloop ziet er hetzelfde uit en is zo goed als gratis.
+      */}
       <div
-        className="absolute -right-40 -bottom-24 size-[26rem] animate-float rounded-full bg-neon-alt/14 blur-[100px]"
-        style={{ animationDelay: "-5s" }}
+        className="absolute -top-[15rem] -left-[13rem] size-[40rem] animate-float rounded-full"
+        style={{
+          background:
+            "radial-gradient(circle, color-mix(in oklab, var(--neon) 14%, transparent) 0%, transparent 68%)",
+        }}
+      />
+      <div
+        className="absolute -right-[14rem] -bottom-[10rem] size-[34rem] animate-float rounded-full"
+        style={{
+          animationDelay: "-5s",
+          background:
+            "radial-gradient(circle, color-mix(in oklab, var(--neon-alt) 16%, transparent) 0%, transparent 68%)",
+        }}
       />
 
       {glowActive ? (

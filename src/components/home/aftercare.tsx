@@ -205,7 +205,7 @@ export function Aftercare() {
                       />
                       <span className="text-muted-foreground">
                         {item}
-                        <span className="block text-xs text-muted-foreground/70">
+                        <span className="block text-xs text-muted-foreground">
                           Apart gefactureerd
                         </span>
                       </span>

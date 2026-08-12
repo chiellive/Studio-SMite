@@ -14,7 +14,13 @@ export function CtaBand() {
               aria-hidden
               className="pointer-events-none absolute inset-0 opacity-70"
             >
-              <div className="absolute -top-24 left-1/2 size-[28rem] -translate-x-1/2 animate-float rounded-full bg-neon/12 blur-[120px]" />
+              <div
+                className="absolute -top-40 left-1/2 size-[38rem] -translate-x-1/2 animate-float rounded-full"
+                style={{
+                  background:
+                    "radial-gradient(circle, color-mix(in oklab, var(--neon) 14%, transparent) 0%, transparent 68%)",
+                }}
+              />
               <div className="hairline-grid mask-fade-edges absolute inset-0 opacity-40" />
             </div>
 

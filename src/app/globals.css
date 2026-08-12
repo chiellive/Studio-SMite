@@ -347,6 +347,56 @@ html.rainbow .neon-edge::after {
   }
 }
 
+/*
+ * Binnenkomst van de hero, bewust in CSS en niet in JavaScript.
+ *
+ * Met Framer Motion begon de opbouw pas nadat de pagina was ingeladen en
+ * geactiveerd. De grote titel stond tot dan op onzichtbaar, en Google rekent
+ * dat aan als een trage weergave: de LCP kwam op 2,7 seconden terwijl de
+ * eerste tekening al na 1,1 seconde klaar was. Als CSS start de animatie
+ * meteen bij die eerste tekening, met exact dezelfde beweging en timing.
+ */
+/*
+ * `backwards` en niet `both`: na afloop valt het element terug op zijn eigen
+ * stijl, die zichtbaar is. Draait de animatie om welke reden dan ook niet, dan
+ * staat de tekst er gewoon, in plaats van onzichtbaar te blijven hangen.
+ */
+.hero-rise {
+  animation: hero-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+/*
+ * De titel schuift alleen omhoog en vervaagt niet.
+ *
+ * Google meet met de LCP wanneer het grootste stuk inhoud verschijnt, en een
+ * element op doorzichtigheid nul telt daarvoor niet mee. Liet ik de titel
+ * mee vervagen, dan vond Lighthouse helemaal geen LCP-element. Nu staat de
+ * tekst er vanaf de eerste tekening en blijft alleen de beweging over.
+ */
+.hero-rise-word {
+  animation: hero-rise-word 1s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes hero-rise-word {
+  from {
+    transform: translate3d(0, 26px, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+
 @keyframes led {
   0%,
   100% {

@@ -33,10 +33,20 @@ export function Founder() {
                 hoog en overheerst het de hele pagina. */}
             <div className="glass-panel relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-3xl lg:max-w-none">
               <div aria-hidden className="absolute inset-0">
-                <div className="absolute -top-16 -left-10 size-72 animate-float rounded-full bg-neon/20 blur-[90px]" />
                 <div
-                  className="absolute -right-12 -bottom-16 size-72 animate-float rounded-full bg-neon-alt/25 blur-[90px]"
-                  style={{ animationDelay: "-4s" }}
+                  className="absolute -top-40 -left-32 size-[26rem] animate-float rounded-full"
+                  style={{
+                    background:
+                      "radial-gradient(circle, color-mix(in oklab, var(--neon) 22%, transparent) 0%, transparent 68%)",
+                  }}
+                />
+                <div
+                  className="absolute -right-36 -bottom-40 size-[26rem] animate-float rounded-full"
+                  style={{
+                    animationDelay: "-4s",
+                    background:
+                      "radial-gradient(circle, color-mix(in oklab, var(--neon-alt) 26%, transparent) 0%, transparent 68%)",
+                  }}
                 />
                 <div className="hairline-grid absolute inset-0 opacity-40" />
               </div>

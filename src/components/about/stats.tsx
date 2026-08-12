@@ -39,7 +39,7 @@ export function Stats() {
                   <p className="font-display text-4xl leading-none font-bold tracking-tight sm:text-[2.75rem]">
                     <span className="text-gradient-neon">{stat.value}</span>
                     {stat.unit ? (
-                      <span className="ml-0.5 text-xl text-muted-foreground/60">
+                      <span className="ml-0.5 text-xl text-muted-foreground">
                         {stat.unit}
                       </span>
                     ) : null}

@@ -232,8 +232,20 @@ export function ContactForm() {
   return (
     <div className="glass-panel relative overflow-hidden rounded-3xl">
       <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-32 -right-24 size-80 rounded-full bg-neon/10 blur-[110px]" />
-        <div className="absolute -bottom-32 -left-24 size-80 rounded-full bg-neon-alt/12 blur-[110px]" />
+        <div
+          className="absolute -top-52 -right-44 size-[32rem] rounded-full"
+          style={{
+            background:
+              "radial-gradient(circle, color-mix(in oklab, var(--neon) 12%, transparent) 0%, transparent 68%)",
+          }}
+        />
+        <div
+          className="absolute -bottom-52 -left-44 size-[32rem] rounded-full"
+          style={{
+            background:
+              "radial-gradient(circle, color-mix(in oklab, var(--neon-alt) 14%, transparent) 0%, transparent 68%)",
+          }}
+        />
       </div>
 
       <AnimatePresence mode="wait">
@@ -668,7 +680,7 @@ function Field({
           {error}
         </p>
       ) : hint ? (
-        <p className="text-xs leading-relaxed text-muted-foreground/70">
+        <p className="text-xs leading-relaxed text-muted-foreground">
           {hint}
         </p>
       ) : null}

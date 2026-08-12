@@ -63,7 +63,7 @@ function LiveClock() {
       {time ? (
         <>
           {time}
-          <span className="ml-1.5 text-muted-foreground/60">België</span>
+          <span className="ml-1.5 text-muted-foreground">België</span>
         </>
       ) : (
         <span className="opacity-0">00:00:00</span>
@@ -84,7 +84,7 @@ function CompanyDetails() {
 
   return (
     <div className="space-y-2">
-      <p className="text-xs leading-relaxed text-muted-foreground/80">
+      <p className="text-xs leading-relaxed text-muted-foreground">
         {parts.map((part, index) => (
           <span key={part}>
             {index > 0 ? (
@@ -98,7 +98,7 @@ function CompanyDetails() {
       </p>
 
       {legal.companyNumber ? null : (
-        <p className="text-xs leading-relaxed text-muted-foreground/60">
+        <p className="text-xs leading-relaxed text-muted-foreground">
           {legal.pendingNote}
         </p>
       )}
@@ -128,7 +128,7 @@ export function Footer() {
               Snelle, mooie websites voor kleine bedrijven. Volledig op maat
               gebouwd, en het hele jaar door onderhouden.
             </p>
-            <p className="mt-4 font-mono text-xs text-muted-foreground/70">
+            <p className="mt-4 font-mono text-xs text-muted-foreground">
               {site.location}
             </p>
           </div>
@@ -208,7 +208,7 @@ export function Footer() {
         </div>
 
         <div className="mt-6 flex flex-col-reverse items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-muted-foreground/70">
+          <p className="text-xs text-muted-foreground">
             © {year} {site.name}. Gebouwd door {site.founder.name}.
           </p>
 
