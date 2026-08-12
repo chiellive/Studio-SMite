@@ -1,19 +1,12 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { Check, Loader2, Send } from "lucide-react";
+import { Check, ChevronDown, Loader2, Send } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState } from "react";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { neonBurst } from "@/lib/confetti";
 import {
@@ -347,25 +340,43 @@ export function ContactForm() {
               error={errors.projectType}
               hint="Wat er het dichtst bij komt volstaat."
             >
-              <Select
-                value={fields.projectType}
-                onValueChange={(value) => set("projectType", value)}
-              >
-                <SelectTrigger
+              {/*
+                Bewust de keuzelijst van het besturingssysteem en niet die van
+                Radix. Die laatste bouwt bij elke klik een portaal op,
+                vergrendelt het scrollen en herberekent zijn positie, en dat
+                duurde meetbaar langer dan de 200 ms die een klik mag kosten.
+                Deze wordt door het toestel zelf getekend: op een telefoon
+                krijgt de bezoeker het vertrouwde keuzewiel.
+              */}
+              <div className="relative">
+                <select
                   id="projectType"
+                  name="projectType"
+                  value={fields.projectType}
+                  onChange={(event) => set("projectType", event.target.value)}
                   aria-invalid={Boolean(errors.projectType)}
-                  className="h-11 w-full bg-black/25 px-3.5 data-[size=default]:h-11"
+                  className={cn(
+                    "h-11 w-full appearance-none rounded-lg border border-input bg-black/25 py-1 pr-10 pl-3.5 text-base transition-colors outline-none [color-scheme:dark] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm",
+                    fields.projectType
+                      ? "text-foreground"
+                      : "text-muted-foreground",
+                  )}
                 >
-                  <SelectValue placeholder="Kies een optie" />
-                </SelectTrigger>
-                <SelectContent position="popper">
+                  <option value="" disabled>
+                    Kies een optie
+                  </option>
                   {projectTypes.map((type) => (
-                    <SelectItem key={type} value={type}>
+                    <option key={type} value={type} className="text-foreground">
                       {type}
-                    </SelectItem>
+                    </option>
                   ))}
-                </SelectContent>
-              </Select>
+                </select>
+
+                <ChevronDown
+                  aria-hidden
+                  className="pointer-events-none absolute top-1/2 right-3.5 size-4 -translate-y-1/2 text-muted-foreground"
+                />
+              </div>
             </Field>
 
             <fieldset>

@@ -3,6 +3,8 @@
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
+import { cn } from "@/lib/utils";
+
 const INTERACTIVE_SELECTOR =
   'a, button, input, textarea, select, [role="button"], [data-cursor="grow"]';
 
@@ -108,19 +110,24 @@ export function CursorRing() {
 
   return (
     <>
+      {/*
+        Alleen schaal en doorzichtigheid worden geanimeerd, want die twee kan
+        de grafische kaart alleen afhandelen. Eerder groeide de ring via
+        breedte en hoogte, en dan moet de browser bij elk frame de opmaak van
+        de pagina opnieuw doorrekenen. Dat gebeurde telkens als je met de muis
+        over een link ging, dus bijna doorlopend.
+      */}
       <motion.div
         aria-hidden
-        className="pointer-events-none fixed top-0 left-0 z-[200] hidden rounded-full border border-neon/70 md:block"
+        className={cn(
+          "pointer-events-none fixed top-0 left-0 z-[200] hidden size-[30px] rounded-full border border-neon/70 transition-[background-color,box-shadow] duration-300 md:block",
+          hot &&
+            "bg-neon/10 shadow-[0_0_28px_-4px_var(--neon),inset_0_0_18px_-8px_var(--neon)]",
+        )}
         style={{ x: ringX, y: ringY, translateX: "-50%", translateY: "-50%" }}
         animate={{
-          width: hot ? 58 : 30,
-          height: hot ? 58 : 30,
           opacity: visible ? (hot ? 1 : 0.65) : 0,
-          scale: pressed ? 0.82 : 1,
-          backgroundColor: hot ? "rgba(0, 240, 255, 0.09)" : "rgba(0,0,0,0)",
-          boxShadow: hot
-            ? "0 0 28px -4px var(--neon), inset 0 0 18px -8px var(--neon)"
-            : "0 0 0px 0px rgba(0,0,0,0)",
+          scale: (hot ? 1.93 : 1) * (pressed ? 0.82 : 1),
         }}
         transition={{ type: "spring", stiffness: 380, damping: 28 }}
       />
