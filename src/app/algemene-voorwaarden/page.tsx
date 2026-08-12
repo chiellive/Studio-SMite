@@ -6,7 +6,7 @@ import {
   LegalLayout,
   LegalSection,
 } from "@/components/legal/legal-layout";
-import { legal, plans, prepayOffer } from "@/lib/site";
+import { legal, plans } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Algemene voorwaarden",
@@ -92,10 +92,6 @@ export default function TermsPage() {
           van deze website beschreven staan. Die formules lopen per jaar en
           worden stilzwijgend verlengd, tenzij je minstens een maand voor de
           vervaldag laat weten dat je stopt.
-        </p>
-        <p>
-          {prepayOffer.headline} Stop je in dat geval vroeger, dan wordt het
-          voordeel van de gratis bouw verrekend met de resterende jaren.
         </p>
         <p>
           Wijzigingen aan de tarieven of de inhoud van deze formules worden

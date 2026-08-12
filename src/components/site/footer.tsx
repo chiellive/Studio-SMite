@@ -115,7 +115,9 @@ export function Footer() {
             <h2 className="font-mono text-[11px] tracking-[0.2em] text-muted-foreground uppercase">
               Navigeren
             </h2>
-            <ul className="mt-4 space-y-2.5">
+            {/* Ruime regelhoogte zodat elke link op een telefoon een fatsoenlijk
+                aanraakdoel is en niet een lijntje tekst van 20 pixels. */}
+            <ul className="mt-3 space-y-0.5">
               {[
                 ...navItems,
                 { href: "/#aftercare", label: "Hosting & nazorg" },
@@ -123,7 +125,7 @@ export function Footer() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="group inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-neon"
+                    className="group inline-flex items-center gap-1 py-2 text-sm text-muted-foreground transition-colors hover:text-neon"
                   >
                     <ChevronRight className="size-3 -translate-x-1 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100" />
                     {item.label}
@@ -137,22 +139,22 @@ export function Footer() {
             <h2 className="font-mono text-[11px] tracking-[0.2em] text-muted-foreground uppercase">
               Contact
             </h2>
-            <ul className="mt-4 space-y-2.5">
+            <ul className="mt-3 space-y-0.5">
               <li>
                 <a
                   href={`mailto:${site.email}`}
-                  className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-neon"
+                  className="inline-flex items-center gap-2 py-2 text-sm break-all text-muted-foreground transition-colors hover:text-neon"
                 >
-                  <Mail className="size-3.5" />
+                  <Mail className="size-3.5 shrink-0" />
                   {site.email}
                 </a>
               </li>
               <li>
                 <Link
                   href="/contact"
-                  className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-neon"
+                  className="inline-flex items-center gap-2 py-2 text-sm text-muted-foreground transition-colors hover:text-neon"
                 >
-                  <MessageSquare className="size-3.5" />
+                  <MessageSquare className="size-3.5 shrink-0" />
                   Start een project
                 </Link>
               </li>
@@ -163,12 +165,12 @@ export function Footer() {
             <h2 className="font-mono text-[11px] tracking-[0.2em] text-muted-foreground uppercase">
               Juridisch
             </h2>
-            <ul className="mt-4 space-y-2.5">
+            <ul className="mt-3 space-y-0.5">
               {legalPages.map((page) => (
                 <li key={page.href}>
                   <Link
                     href={page.href}
-                    className="group inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-neon"
+                    className="group inline-flex items-center gap-1 py-2 text-sm text-muted-foreground transition-colors hover:text-neon"
                   >
                     <ChevronRight className="size-3 -translate-x-1 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100" />
                     {page.label}
@@ -208,7 +210,7 @@ export function Footer() {
               onClick={openTerminal}
               title="Open de commandoterminal (Ctrl+K)"
               aria-label="Open de commandoterminal"
-              className="group rounded-md border border-white/8 bg-white/[0.03] p-1.5 text-muted-foreground transition-all hover:border-neon/40 hover:text-neon hover:shadow-[0_0_18px_-6px_var(--neon)]"
+              className="group flex size-8 items-center justify-center rounded-md border border-white/8 bg-white/[0.03] text-muted-foreground transition-all hover:border-neon/40 hover:text-neon hover:shadow-[0_0_18px_-6px_var(--neon)]"
             >
               <TerminalSquare className="size-3.5" />
             </button>

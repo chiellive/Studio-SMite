@@ -1,10 +1,10 @@
-import { ArrowUpRight, Check, Euro, Gift, Server } from "lucide-react";
+import { ArrowUpRight, Check, Euro, Server } from "lucide-react";
 import Link from "next/link";
 
 import { Reveal } from "@/components/site/reveal";
 import { SectionHeading } from "@/components/site/section-heading";
 import { SpotlightCard } from "@/components/site/spotlight-card";
-import { careBuildDiscount, plans, prepayOffer } from "@/lib/site";
+import { careBuildDiscount, plans } from "@/lib/site";
 
 const [care, hosting] = plans;
 
@@ -33,29 +33,31 @@ function CostSplit({
 }) {
   return (
     <dl className="mt-6 overflow-hidden rounded-xl border border-white/8 bg-black/25">
-      <div className="flex items-baseline justify-between gap-4 border-b border-white/8 px-4 py-3">
+      {/* Op smalle schermen onder elkaar, want naast elkaar breekt de waarde
+          over twee regels en gaan de twee kaarten uit de pas lopen. */}
+      <div className="flex flex-col gap-1 border-b border-white/8 px-4 py-3 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
         <dt className="font-mono text-[10px] tracking-[0.16em] text-muted-foreground uppercase">
           Om te bouwen
         </dt>
         <dd
           className={
             tone === "care"
-              ? "text-sm font-medium text-emerald-400"
-              : "text-sm font-medium text-foreground"
+              ? "text-sm font-medium text-emerald-400 sm:text-right"
+              : "text-sm font-medium text-foreground sm:text-right"
           }
         >
           {upfront}
         </dd>
       </div>
-      <div className="flex items-baseline justify-between gap-4 px-4 py-3">
+      <div className="flex flex-col gap-1 px-4 py-3 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
         <dt className="font-mono text-[10px] tracking-[0.16em] text-muted-foreground uppercase">
           Elk jaar erna
         </dt>
         <dd
           className={
             tone === "hosting"
-              ? "text-sm font-medium text-emerald-400"
-              : "text-sm font-medium text-foreground"
+              ? "text-sm font-medium text-emerald-400 sm:text-right"
+              : "text-sm font-medium text-foreground sm:text-right"
           }
         >
           {yearly}
@@ -134,21 +136,6 @@ export function Aftercare() {
                     </li>
                   ))}
                 </ul>
-
-                <div className="mt-7 flex gap-3.5 rounded-xl border border-neon/25 bg-neon/[0.07] p-4">
-                  <Gift
-                    aria-hidden
-                    className="mt-0.5 size-4 shrink-0 text-neon"
-                  />
-                  <p className="text-sm leading-relaxed">
-                    <span className="font-medium">{prepayOffer.headline}</span>
-                    <span className="mt-1 block text-xs text-muted-foreground">
-                      {prepayOffer.years} jaar aan {care.price} komt op{" "}
-                      {prepayOffer.total}, en de bouw van je website kost je
-                      daar bovenop niets.
-                    </span>
-                  </p>
-                </div>
 
                 <div className="mt-auto pt-8">
                   <Link

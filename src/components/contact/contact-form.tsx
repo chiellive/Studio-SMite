@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { Check, Loader2, Mail, Send } from "lucide-react";
+import { Check, Loader2, Send } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState } from "react";
 
@@ -19,9 +19,9 @@ import { neonBurst } from "@/lib/confetti";
 import {
   buildBudgets,
   plans,
-  prepayOffer,
   projectTypes,
   site,
+  web3formsKey,
 } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
@@ -57,12 +57,8 @@ function aftercareLabel(id: string) {
   return option.price ? `${option.name} (${option.price})` : option.name;
 }
 
-/**
- * Optioneel POST-adres. Staat het niet ingesteld, dan valt het formulier terug
- * op een volledig ingevulde e-mail in het mailprogramma van de bezoeker, zodat
- * een aanvraag nooit stilletjes verloren gaat.
- */
-const ENDPOINT = process.env.NEXT_PUBLIC_CONTACT_ENDPOINT;
+/** Web3Forms bezorgt het bericht per e-mail, zonder eigen server. */
+const WEB3FORMS_URL = "https://api.web3forms.com/submit";
 
 type Status = "idle" | "sending" | "sent";
 
@@ -72,7 +68,6 @@ type Fields = {
   projectType: string;
   aftercare: string;
   buildBudget: string;
-  prepayFiveYears: boolean;
   message: string;
 };
 
@@ -82,7 +77,6 @@ const EMPTY: Fields = {
   projectType: "",
   aftercare: "",
   buildBudget: "",
-  prepayFiveYears: false,
   message: "",
 };
 
@@ -120,11 +114,6 @@ function buildMailto(fields: Fields) {
     fields.aftercare === "hosting"
       ? `Budget voor de bouw: ${fields.buildBudget}`
       : null,
-    fields.aftercare === "care"
-      ? `Vijf jaar vooruit betalen: ${
-          fields.prepayFiveYears ? "Interesse" : "Geen interesse"
-        }`
-      : null,
     "",
     fields.message,
   ]
@@ -144,6 +133,7 @@ export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [revealed, setRevealed] = useState(false);
   const [mailtoHref, setMailtoHref] = useState("");
+  const [sendFailed, setSendFailed] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   const set = <K extends keyof Fields>(key: K, value: Fields[K]) => {
@@ -151,14 +141,13 @@ export function ContactForm() {
     setErrors((current) => ({ ...current, [key]: undefined }));
   };
 
-  // Van optie wisselen wist wat de andere optie had gevraagd, zodat een oud
-  // budget of vinkje nooit kan meeliften in de e-mail.
+  // Van optie wisselen wist het budget weer, zodat een oud bedrag nooit kan
+  // meeliften in de e-mail.
   const chooseAftercare = (id: string) => {
     setFields((current) => ({
       ...current,
       aftercare: id,
       buildBudget: id === "hosting" ? current.buildBudget : "",
-      prepayFiveYears: id === "care" ? current.prepayFiveYears : false,
     }));
     setErrors((current) => ({ ...current, buildBudget: undefined }));
   };
@@ -173,24 +162,54 @@ export function ContactForm() {
       return;
     }
 
+    // Verborgen veld dat alleen een bot invult. Web3Forms weigert het bericht
+    // zodra hier iets in staat.
+    const honeypot =
+      (event.currentTarget.elements.namedItem("botcheck") as HTMLInputElement | null)
+        ?.value ?? "";
+
     setStatus("sending");
-    const href = buildMailto(fields);
-    setMailtoHref(href);
+    setSendFailed(false);
+    setMailtoHref(buildMailto(fields));
 
     try {
-      if (ENDPOINT) {
-        await fetch(ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(fields),
-        });
-      } else {
-        // Even tijd geven aan de verzendanimatie voor het mailprogramma opent.
-        await new Promise((resolve) => window.setTimeout(resolve, 900));
-        window.location.href = href;
-      }
+      const response = await fetch(WEB3FORMS_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: web3formsKey,
+          subject: `Website-aanvraag van ${fields.name}`,
+          from_name: "Studio SMITE",
+          replyto: fields.email,
+          botcheck: honeypot,
+          Naam: fields.name,
+          "E-mail": fields.email,
+          "Op zoek naar": fields.projectType,
+          Nazorg: aftercareLabel(fields.aftercare),
+          "Budget voor de bouw":
+            fields.aftercare === "hosting"
+              ? fields.buildBudget
+              : "Niet van toepassing",
+          Bericht: fields.message,
+        }),
+      });
+
+      const result: unknown = await response.json().catch(() => null);
+      const ok =
+        response.ok &&
+        typeof result === "object" &&
+        result !== null &&
+        (result as { success?: boolean }).success === true;
+
+      if (!ok) throw new Error("Web3Forms weigerde het bericht");
     } catch {
-      // Bezorging blijft werken via de mailterugval hieronder.
+      // Niet doen alsof het gelukt is: toon de fout en bied de mailterugval aan.
+      setStatus("idle");
+      setSendFailed(true);
+      return;
     }
 
     setStatus("sent");
@@ -212,6 +231,7 @@ export function ContactForm() {
     setFields(EMPTY);
     setErrors({});
     setMailtoHref("");
+    setSendFailed(false);
     setRevealed(false);
     setStatus("idle");
   };
@@ -243,25 +263,15 @@ export function ContactForm() {
             </motion.span>
 
             <h2 className="mt-7 font-display text-2xl font-semibold sm:text-3xl">
-              {ENDPOINT ? "Bericht ontvangen." : "Bericht klaar om te sturen."}
+              Bericht verzonden.
             </h2>
 
             <p className="mt-3 max-w-md text-sm leading-relaxed text-muted-foreground">
-              {ENDPOINT
-                ? `Bedankt ${fields.name.split(" ")[0]}, het is goed aangekomen. Je krijgt antwoord van ${site.email}, meestal binnen een dag.`
-                : `Je mailprogramma is geopend met alles al ingevuld. Druk daar op verzenden en het komt rechtstreeks bij ${site.email} terecht.`}
+              Bedankt {fields.name.split(" ")[0]}, het is goed aangekomen. Je
+              krijgt antwoord van {site.email}, meestal binnen een dag.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              {ENDPOINT ? null : (
-                <a
-                  href={mailtoHref}
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-neon/25 bg-neon/10 px-6 py-3 text-sm font-medium text-foreground transition-all hover:bg-neon/20 hover:shadow-[0_0_30px_-8px_var(--neon)]"
-                >
-                  <Mail className="size-4" />
-                  Open mijn mailprogramma opnieuw
-                </a>
-              )}
               <button
                 type="button"
                 onClick={reset}
@@ -281,6 +291,17 @@ export function ContactForm() {
             transition={{ duration: 0.3 }}
             className="relative space-y-6 p-7 sm:p-10"
           >
+            {/* Lokaas voor bots. Mensen zien dit veld nooit, invulprogramma's wel. */}
+            <input
+              type="text"
+              name="botcheck"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              className="hidden"
+              defaultValue=""
+            />
+
             <div className="grid gap-6 sm:grid-cols-2">
               <Field
                 id="name"
@@ -474,58 +495,6 @@ export function ContactForm() {
                   </motion.div>
                 ) : null}
 
-                {fields.aftercare === "care" ? (
-                  <motion.label
-                    key="prepay"
-                    htmlFor="prepayFiveYears"
-                    initial={{ opacity: 0, y: -6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.25 }}
-                    className={cn(
-                      "mt-4 flex cursor-pointer items-start gap-3.5 rounded-2xl border px-4 py-3.5 transition-colors duration-300 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-neon/60",
-                      fields.prepayFiveYears
-                        ? "border-neon/45 bg-neon/12"
-                        : "border-white/10 bg-black/25 hover:border-white/25",
-                    )}
-                  >
-                    <input
-                      id="prepayFiveYears"
-                      name="prepayFiveYears"
-                      type="checkbox"
-                      checked={fields.prepayFiveYears}
-                      onChange={(event) =>
-                        set("prepayFiveYears", event.target.checked)
-                      }
-                      className="sr-only"
-                    />
-
-                    <span
-                      aria-hidden
-                      className={cn(
-                        "mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-md border transition-colors duration-300",
-                        fields.prepayFiveYears
-                          ? "border-neon bg-neon text-[#04141a]"
-                          : "border-white/25 bg-transparent",
-                      )}
-                    >
-                      {fields.prepayFiveYears ? (
-                        <Check className="size-3.5" strokeWidth={3} />
-                      ) : null}
-                    </span>
-
-                    <span className="min-w-0">
-                      <span className="block text-sm font-medium">
-                        {prepayOffer.headline}
-                      </span>
-                      <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">
-                        {prepayOffer.years} jaar aan {plans[0].price} komt op{" "}
-                        {prepayOffer.total}, en de bouw kost je daar bovenop
-                        niets. Vink dit aan en ik geef je beide prijzen.
-                      </span>
-                    </span>
-                  </motion.label>
-                ) : null}
               </AnimatePresence>
             </fieldset>
 
@@ -546,6 +515,28 @@ export function ContactForm() {
                 className="min-h-32 resize-y bg-black/25 px-3.5 py-3"
               />
             </Field>
+
+            {sendFailed ? (
+              <div
+                role="alert"
+                className="rounded-2xl border border-destructive/40 bg-destructive/10 p-4 text-sm leading-relaxed"
+              >
+                <p className="font-medium text-destructive">
+                  Het versturen is niet gelukt.
+                </p>
+                <p className="mt-1 text-muted-foreground">
+                  Waarschijnlijk hapert de verbinding. Probeer het zo nog eens,
+                  of{" "}
+                  <a
+                    href={mailtoHref}
+                    className="text-neon underline-offset-4 hover:underline"
+                  >
+                    stuur het als gewone e-mail
+                  </a>
+                  , dan is alles al voor je ingevuld.
+                </p>
+              </div>
+            ) : null}
 
             <div className="flex flex-col items-start gap-4 pt-1 sm:flex-row sm:items-center sm:justify-between">
               <motion.button
@@ -635,6 +626,15 @@ export function ContactForm() {
   );
 }
 
+/**
+ * Label boven het veld, uitleg eronder.
+ *
+ * Label en uitleg stonden eerst naast elkaar, maar in de kolom van 183 pixels
+ * die naam en e-mail bij 1024 breed krijgen past dat niet, waardoor de ene
+ * regel wel en de andere niet omsloeg en de velden scheef kwamen te staan.
+ * Onder het veld past de uitleg op elke breedte op één regel, en een foutmelding
+ * neemt diezelfde plek in zonder de rest te verschuiven.
+ */
 function Field({
   id,
   label,
@@ -650,18 +650,17 @@ function Field({
 }) {
   return (
     <div className="space-y-2">
-      <div className="flex items-baseline justify-between gap-3">
-        <Label htmlFor={id}>{label}</Label>
-        {hint && !error ? (
-          <span className="text-xs text-muted-foreground/70">{hint}</span>
-        ) : null}
-        {error ? (
-          <span role="alert" className="text-xs text-destructive">
-            {error}
-          </span>
-        ) : null}
-      </div>
+      <Label htmlFor={id}>{label}</Label>
       {children}
+      {error ? (
+        <p role="alert" className="text-xs leading-relaxed text-destructive">
+          {error}
+        </p>
+      ) : hint ? (
+        <p className="text-xs leading-relaxed text-muted-foreground/70">
+          {hint}
+        </p>
+      ) : null}
     </div>
   );
 }

@@ -29,7 +29,9 @@ export function Founder() {
         <div className="mt-14 grid items-start gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
           {/* Portrait plate */}
           <Reveal scale>
-            <div className="glass-panel relative aspect-[4/5] overflow-hidden rounded-3xl">
+            {/* Zonder maximumbreedte wordt dit vlak op een tablet ruim 800 pixels
+                hoog en overheerst het de hele pagina. */}
+            <div className="glass-panel relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-3xl lg:max-w-none">
               <div aria-hidden className="absolute inset-0">
                 <div className="absolute -top-16 -left-10 size-72 animate-float rounded-full bg-neon/20 blur-[90px]" />
                 <div

@@ -73,23 +73,25 @@ and `.dark` carry the same values and `<html>` always ships the `dark` class.
 
 ## Contact form delivery
 
-The form works with no backend. On submit it opens a prefilled email in the
-visitor's mail client, addressed to the studio.
+The form posts to [Web3Forms](https://web3forms.com), which emails the
+submission to the studio. There is no backend of our own and no database.
 
-To post to a real endpoint instead, set an environment variable:
+The access key lives in `src/lib/site.ts` as `web3formsKey`. It is meant to be
+public: it travels from the visitor's browser and is therefore always visible
+in the shipped JavaScript. It only grants the right to send a message to the
+configured address, never to read anything. Lock the allowed domain in the
+Web3Forms dashboard to limit abuse.
 
-```bash
-NEXT_PUBLIC_CONTACT_ENDPOINT=https://your-endpoint.example/api/contact
-```
+Fields are sent with Dutch labels so the email is readable as-is. A hidden
+`botcheck` input rides along as a honeypot; Web3Forms rejects the submission
+when it is filled.
 
-When that is set the form sends a JSON body with `name`, `email`,
-`projectType`, `aftercare` (`care`, `hosting`, `unsure` or empty),
-`buildBudget`, `prepayFiveYears` and `message`, and the success copy changes to
-match.
+If the request fails the form does **not** claim success. It shows an error and
+offers a `mailto:` link with everything already filled in, so a lead is never
+silently lost.
 
-`buildBudget` is only filled in when `aftercare` is `hosting`, and
-`prepayFiveYears` only when it is `care`. Switching between the two clears the
-other one, so a stale value can never be submitted.
+`buildBudget` is only filled in when `aftercare` is `hosting`. Switching to
+another option clears it, so a stale amount can never be submitted.
 
 ## Hidden details
 

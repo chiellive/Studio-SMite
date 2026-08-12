@@ -122,7 +122,7 @@ export function SiteNav() {
             onClick={() => setMenuOpen((open) => !open)}
             aria-label={menuOpen ? "Menu sluiten" : "Menu openen"}
             aria-expanded={menuOpen}
-            className="rounded-lg border border-white/8 bg-white/[0.03] p-2 text-foreground transition-colors hover:border-neon/30 md:hidden"
+            className="flex size-10 items-center justify-center rounded-lg border border-white/8 bg-white/[0.03] text-foreground transition-colors hover:border-neon/30 md:hidden"
           >
             {menuOpen ? <X className="size-4" /> : <Menu className="size-4" />}
           </button>

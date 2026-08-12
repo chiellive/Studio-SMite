@@ -5,7 +5,10 @@ export const site = {
   description:
     "Studio SMITE bouwt snelle, mooie websites voor kleine bedrijven. Volledig op maat gemaakt, makkelijk vindbaar op Google, en het hele jaar door onderhouden. Opgericht door Chiel Smets.",
   url: "https://studiosmite.com",
-  email: "hello@studio-smite.dev",
+  // Tijdelijk het persoonlijke adres, tot er een eigen studio-adres is.
+  // Eén keer hier wijzigen past het overal aan: voettekst, contactpagina,
+  // de juridische pagina's en elke mailto-link.
+  email: "chielsmets1@gmail.com",
   location: "België, wereldwijd actief",
   founder: {
     name: "Chiel Smets",
@@ -47,6 +50,17 @@ export const legal: LegalInfo = {
     "De inschrijving bij het ondernemingsloket loopt. Het ondernemingsnummer en de btw-gegevens komen hier zodra ze toegekend zijn.",
   jurisdiction: null,
 };
+
+/**
+ * Toegangssleutel van Web3Forms, de dienst die het contactformulier bezorgt.
+ *
+ * Deze sleutel hoort publiek te zijn: hij wordt vanuit de browser van de
+ * bezoeker meegestuurd en staat dus sowieso in de JavaScript van de site. Hij
+ * geeft alleen het recht om een bericht naar het ingestelde adres te sturen,
+ * niet om iets te lezen. Beperk misbruik in het dashboard van Web3Forms door
+ * het domein vast te zetten.
+ */
+export const web3formsKey = "d54fef3a-fc38-49ad-af2b-ec64d919ac43";
 
 export const navItems = [
   { href: "/", label: "Home", index: "01" },
@@ -98,16 +112,6 @@ export const plans = [
     upfront: "Volle prijs voor de websitebouw",
   },
 ] as const;
-
-/**
- * Betaal het zorgpakket vijf jaar vooruit en de bouw kost niets.
- * `total` is 5 x de jaarprijs van het zorgpakket: pas het mee aan als die wijzigt.
- */
-export const prepayOffer = {
-  years: 5,
-  total: "€1.500",
-  headline: "Betaal 5 jaar vooruit en de websitebouw is gratis.",
-} as const;
 
 /**
  * Verschijnt op het contactformulier zodra iemand voor enkel hosting kiest,

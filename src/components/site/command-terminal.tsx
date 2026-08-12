@@ -5,7 +5,7 @@ import { TerminalSquare, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { careBuildDiscount, plans, prepayOffer, site } from "@/lib/site";
+import { careBuildDiscount, plans, site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 type Line = {
@@ -135,7 +135,6 @@ export function CommandTerminal({
             { kind: "out", text: "  · Hosting geregeld en beheerd" },
             { kind: "out", text: "  · Onderhoud en updates" },
             { kind: "out", text: "  · Blijft werken, hersteld als er iets stukgaat" },
-            { kind: "warn", text: `  ★ ${prepayOffer.headline}` },
             { kind: "dim", text: "" },
             {
               kind: "ok",

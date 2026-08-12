@@ -101,7 +101,7 @@ export function Services() {
                 <div className="mt-auto pt-9">
                   <Link
                     href="/contact"
-                    className="inline-flex items-center gap-1.5 text-sm font-medium text-neon transition-all hover:gap-2.5"
+                    className="inline-flex items-center gap-1.5 py-2 text-sm font-medium text-neon transition-all hover:gap-2.5"
                   >
                     Vraag een prijs
                     <ArrowUpRight className="size-4" />
