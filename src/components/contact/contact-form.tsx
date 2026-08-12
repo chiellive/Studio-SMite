@@ -442,7 +442,7 @@ export function ContactForm() {
 
                     <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
                       Zonder zorgpakket is er geen korting op de bouw, dus dit
-                      is het stuk dat bepaalt wat mogelijk is.
+                      is het stuk dat bepaalt wat er mogelijk is.
                     </p>
 
                     <div

@@ -55,7 +55,7 @@ export function Services() {
               Eén ding, <span className="text-gradient-neon">goed gedaan</span>.
             </>
           }
-          description="Ik bouw websites. Meer niet. Alle aandacht gaat naar dat ene, en daarom is het resultaat beter dan wanneer alles een beetje tegelijk gebeurt."
+          description="Op dit moment ligt mijn focus volledig op websites. Zodra ik er de ruimte voor vind, komt daar meer bij, zoals design en branding."
         />
 
         <div className="mt-14 grid gap-5 lg:grid-cols-3">
@@ -79,8 +79,8 @@ export function Services() {
                 <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
                   Je website wordt gebouwd rond wat jouw bedrijf echt nodig
                   heeft, in plaats van je in een sjabloon te persen dat iemand
-                  anders ontworpen heeft. Niks wordt erbij geplakt, dus niks
-                  vertraagt de site.
+                  anders ontworpen heeft. Alles wat erop staat, staat er omdat
+                  jij het nodig hebt.
                 </p>
 
                 <ul className="mt-7 grid gap-2.5 sm:grid-cols-2">

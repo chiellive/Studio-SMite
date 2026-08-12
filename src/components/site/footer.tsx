@@ -15,8 +15,12 @@ function subscribeToClock(onTick: () => void) {
 
 // Een opgemaakte tekst, geen Date: identieke waarden binnen dezelfde seconde
 // zijn gelijk, en dat is wat useSyncExternalStore van een snapshot verwacht.
+//
+// De tijdzone staat vast op Brussel. Dit is de klok van de studio, niet die van
+// de bezoeker, dus hij klopt ook als iemand van elders kijkt.
 function readClock() {
   return new Date().toLocaleTimeString("nl-BE", {
+    timeZone: "Europe/Brussels",
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
@@ -25,27 +29,19 @@ function readClock() {
 }
 
 function LiveClock() {
-  // De server weet niet in welke tijdzone de bezoeker zit, dus die toont een
-  // plaatshouder en de echte klok neemt het over zodra de pagina geladen is.
+  // De server rendert een plaatshouder en de tikkende klok neemt het over zodra
+  // de pagina geladen is, anders loopt de eerste seconde uit de pas.
   const time = useSyncExternalStore(subscribeToClock, readClock, () => null);
-
-  const zone = time
-    ? Intl.DateTimeFormat()
-        .resolvedOptions()
-        .timeZone.split("/")
-        .pop()
-        ?.replace(/_/g, " ")
-    : null;
 
   return (
     <span
       className="font-mono text-xs tabular-nums text-muted-foreground"
-      aria-label="Huidige lokale tijd"
+      aria-label="Lokale tijd in België"
     >
       {time ? (
         <>
           {time}
-          <span className="ml-1.5 text-muted-foreground/60">{zone}</span>
+          <span className="ml-1.5 text-muted-foreground/60">België</span>
         </>
       ) : (
         <span className="opacity-0">00:00:00</span>

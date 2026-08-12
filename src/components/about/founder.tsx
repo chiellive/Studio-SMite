@@ -20,11 +20,10 @@ export function Founder() {
           eyebrow="Wie ik ben"
           title={
             <>
-              Dit is{" "}
               <span className="text-gradient-neon">{site.founder.name}</span>.
             </>
           }
-          description="Eén persoon, met opzet. Niets wordt doorgegeven tussen afdelingen, en er gaat niets verloren tussen wat je vraagt en wat je krijgt."
+          description="Eén persoon, niets wordt doorgegeven tussen afdelingen, en dus gaat er ook niets verloren tussen wat je vraagt en wat je krijgt."
         />
 
         <div className="mt-14 grid items-start gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">

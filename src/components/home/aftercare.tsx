@@ -4,12 +4,12 @@ import Link from "next/link";
 import { Reveal } from "@/components/site/reveal";
 import { SectionHeading } from "@/components/site/section-heading";
 import { SpotlightCard } from "@/components/site/spotlight-card";
-import { plans, prepayOffer } from "@/lib/site";
+import { careBuildDiscount, plans, prepayOffer } from "@/lib/site";
 
 const [care, hosting] = plans;
 
 const careIncludes = [
-  "30% korting op de prijs om je website te bouwen",
+  `${careBuildDiscount} korting op de prijs om je website te bouwen`,
   "Hosting en domein geregeld en beheerd voor jou",
   "Beveiligingsupdates, plus de kleine tekst- en foto-aanpassingen die opduiken",
   "Gaat er iets stuk, dan los ik het op, zonder extra kosten",

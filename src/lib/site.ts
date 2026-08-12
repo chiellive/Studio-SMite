@@ -69,18 +69,22 @@ export const projectTypes = [
   "Weet ik nog niet",
 ] as const;
 
+/** Korting op de websitebouw die bij het zorgpakket hoort. Staat hier zodat het
+ * percentage maar op één plek te wijzigen valt. */
+export const careBuildDiscount = "40%";
+
 export const plans = [
   {
     id: "care",
     name: "Zorgpakket",
-    price: "€375",
+    price: "€300",
     period: "per jaar",
-    standardPrice: "€650",
+    standardPrice: "€500",
     note: null,
-    summary: "Hosting, updates en herstellingen, plus 30% korting op de bouw.",
+    summary: `Hosting, updates en herstellingen, plus ${careBuildDiscount} korting op de bouw.`,
     // Wat de bouw kost bij deze keuze. De jaarlijkse kant van de vergelijking
     // wordt samengesteld uit price en period, zodat die nooit kan afwijken.
-    upfront: "30% korting op de websitebouw",
+    upfront: `${careBuildDiscount} korting op de websitebouw`,
   },
   {
     id: "hosting",
@@ -95,10 +99,13 @@ export const plans = [
   },
 ] as const;
 
-/** Betaal het zorgpakket vijf jaar vooruit en de bouw kost niets. */
+/**
+ * Betaal het zorgpakket vijf jaar vooruit en de bouw kost niets.
+ * `total` is 5 x de jaarprijs van het zorgpakket: pas het mee aan als die wijzigt.
+ */
 export const prepayOffer = {
   years: 5,
-  total: "€1.875",
+  total: "€1.500",
   headline: "Betaal 5 jaar vooruit en de websitebouw is gratis.",
 } as const;
 

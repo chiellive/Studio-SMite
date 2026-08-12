@@ -21,7 +21,7 @@ export function CtaBand() {
             <div className="relative">
               <span className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.24em] text-neon uppercase">
                 <span aria-hidden className="h-px w-6 bg-neon/50" />
-                Volgende plek vrij
+                Time to make dreams turn into reality
               </span>
 
               <h2 className="mx-auto mt-5 max-w-3xl font-display text-3xl leading-[1.1] font-semibold text-balance sm:text-4xl md:text-5xl">

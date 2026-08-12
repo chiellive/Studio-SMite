@@ -23,7 +23,14 @@ export default function InfoPage() {
             <span className="text-gradient-neon">hoge lat</span>.
           </>
         }
-        description="Studio SMITE bouwt websites voor kleine bedrijven die het deftig gedaan willen zien, niet van de plank gehaald. Hier lees je precies met wie je werkt en hoe het loopt."
+        description={
+          <>
+            Studio SMITE bouwt websites op maat voor kleine bedrijven, van de
+            eerste schets tot het onderhoud erna.
+            <br />
+            Hier lees je precies met wie je werkt en hoe het loopt.
+          </>
+        }
       />
 
       <Stats />
