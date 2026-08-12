@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useMotionValue, useSpring } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const INTERACTIVE_SELECTOR =
   'a, button, input, textarea, select, [role="button"], [data-cursor="grow"]';
@@ -16,6 +16,11 @@ export function CursorRing() {
   const [visible, setVisible] = useState(false);
   const [hot, setHot] = useState(false);
   const [pressed, setPressed] = useState(false);
+
+  // Spiegels van `visible` en `hot`, zodat de muisafhandelaar kan zien wat de
+  // huidige waarde is zonder zichzelf opnieuw te moeten opbouwen.
+  const visibleRef = useRef(false);
+  const hotRef = useRef(false);
 
   const x = useMotionValue(-100);
   const y = useMotionValue(-100);
@@ -42,20 +47,43 @@ export function CursorRing() {
     const root = document.documentElement;
     root.classList.add("has-custom-cursor");
 
+    // De positie gaat rechtstreeks naar motion values, buiten React om. De
+    // dure `closest()` draait hoogstens een keer per frame, en de status wordt
+    // alleen in React gezet als ze echt verandert. Anders zou elke muisbeweging
+    // een boomdoorloop plus twee state-updates kosten, en dat maakt de
+    // hoofdthread traag net wanneer iemand ergens op klikt.
+    let frame = 0;
+    let latestTarget: EventTarget | null = null;
+
+    const readHover = () => {
+      frame = 0;
+      const next =
+        latestTarget instanceof Element
+          ? Boolean(latestTarget.closest(INTERACTIVE_SELECTOR))
+          : false;
+      if (next !== hotRef.current) {
+        hotRef.current = next;
+        setHot(next);
+      }
+    };
+
     const onMove = (event: PointerEvent) => {
       x.set(event.clientX);
       y.set(event.clientY);
-      setVisible(true);
 
-      const target = event.target;
-      setHot(
-        target instanceof Element
-          ? Boolean(target.closest(INTERACTIVE_SELECTOR))
-          : false,
-      );
+      if (!visibleRef.current) {
+        visibleRef.current = true;
+        setVisible(true);
+      }
+
+      latestTarget = event.target;
+      if (!frame) frame = requestAnimationFrame(readHover);
     };
 
-    const onLeave = () => setVisible(false);
+    const onLeave = () => {
+      visibleRef.current = false;
+      setVisible(false);
+    };
     const onDown = () => setPressed(true);
     const onUp = () => setPressed(false);
 
@@ -66,6 +94,7 @@ export function CursorRing() {
     window.addEventListener("blur", onUp);
 
     return () => {
+      if (frame) cancelAnimationFrame(frame);
       root.classList.remove("has-custom-cursor");
       window.removeEventListener("pointermove", onMove);
       document.removeEventListener("pointerleave", onLeave);

@@ -8,17 +8,9 @@ import { LogoMark, Wordmark } from "@/components/site/logo";
 import { useFx } from "@/components/site/fx-provider";
 import { legal, legalPages, navItems, site } from "@/lib/site";
 
-function subscribeToClock(onTick: () => void) {
-  const id = window.setInterval(onTick, 1000);
-  return () => window.clearInterval(id);
-}
-
-// Een opgemaakte tekst, geen Date: identieke waarden binnen dezelfde seconde
-// zijn gelijk, en dat is wat useSyncExternalStore van een snapshot verwacht.
-//
 // De tijdzone staat vast op Brussel. Dit is de klok van de studio, niet die van
 // de bezoeker, dus hij klopt ook als iemand van elders kijkt.
-function readClock() {
+function formatNow() {
   return new Date().toLocaleTimeString("nl-BE", {
     timeZone: "Europe/Brussels",
     hour: "2-digit",
@@ -28,10 +20,40 @@ function readClock() {
   });
 }
 
+/**
+ * De tijd wordt bijgehouden in een variabele in plaats van bij elke aanroep
+ * opnieuw gelezen.
+ *
+ * useSyncExternalStore verwacht dat een snapshot alleen verandert wanneer de
+ * bron een tik geeft. Rechtstreeks de klok lezen brak die belofte: React roept
+ * de functie meermaals per render aan, en viel dat net over een secondegrens,
+ * dan kreeg het twee verschillende waarden terug en waarschuwde het voor een
+ * oneindige lus. Nu verandert de waarde alleen in het interval hieronder.
+ */
+let clockSnapshot = "";
+
+function subscribeToClock(onTick: () => void) {
+  clockSnapshot = formatNow();
+  onTick();
+
+  const id = window.setInterval(() => {
+    const next = formatNow();
+    if (next === clockSnapshot) return;
+    clockSnapshot = next;
+    onTick();
+  }, 1000);
+
+  return () => window.clearInterval(id);
+}
+
+function readClock() {
+  return clockSnapshot;
+}
+
 function LiveClock() {
   // De server rendert een plaatshouder en de tikkende klok neemt het over zodra
   // de pagina geladen is, anders loopt de eerste seconde uit de pas.
-  const time = useSyncExternalStore(subscribeToClock, readClock, () => null);
+  const time = useSyncExternalStore(subscribeToClock, readClock, () => "");
 
   return (
     <span

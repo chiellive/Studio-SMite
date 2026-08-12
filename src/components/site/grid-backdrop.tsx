@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -22,13 +22,28 @@ export function GridBackdrop({ className }: { className?: string }) {
   const calm = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
 
+  // Op een aanraakscherm is er geen muisaanwijzer om te volgen. Zonder deze
+  // controle luisterde de gloed daar toch mee, en dan verstookt elke veeg
+  // rekenkracht op precies de toestellen die het minst te missen hebben.
+  const [pointerFine, setPointerFine] = useState(false);
+
+  useEffect(() => {
+    const query = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const sync = () => setPointerFine(query.matches);
+    sync();
+    query.addEventListener("change", sync);
+    return () => query.removeEventListener("change", sync);
+  }, []);
+
+  const glowActive = pointerFine && !calm;
+
   const px = useMotionValue(-9999);
   const py = useMotionValue(-9999);
   const gx = useSpring(px, { stiffness: 70, damping: 24, mass: 0.6 });
   const gy = useSpring(py, { stiffness: 70, damping: 24, mass: 0.6 });
 
   useEffect(() => {
-    if (calm) return;
+    if (!glowActive) return;
 
     const node = ref.current;
     if (!node) return;
@@ -59,7 +74,7 @@ export function GridBackdrop({ className }: { className?: string }) {
       observer.disconnect();
       window.removeEventListener("pointermove", onMove);
     };
-  }, [calm, px, py]);
+  }, [glowActive, px, py]);
 
   return (
     <div
@@ -78,7 +93,7 @@ export function GridBackdrop({ className }: { className?: string }) {
         style={{ animationDelay: "-5s" }}
       />
 
-      {calm ? null : (
+      {glowActive ? (
         <motion.div
           className="absolute top-0 left-0 size-[720px] rounded-full will-change-transform"
           style={{
@@ -90,7 +105,7 @@ export function GridBackdrop({ className }: { className?: string }) {
               "radial-gradient(circle, color-mix(in oklab, var(--neon) 14%, transparent) 0%, transparent 62%)",
           }}
         />
-      )}
+      ) : null}
 
       <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-background" />
     </div>
