@@ -112,7 +112,6 @@ export function CommandTerminal({
             kind: "out",
             text: "[NU]      Websites op maat gebouwd, voor jouw bedrijf",
           },
-          { kind: "dim", text: "[BINNENKORT] Logo- en huisstijlontwerp" },
           { kind: "dim", text: `Typ "prijzen" voor de jaarlijkse nazorgtarieven.` },
         ],
       }),

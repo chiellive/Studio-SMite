@@ -3,10 +3,10 @@ import { SpotlightCard } from "@/components/site/spotlight-card";
 
 const stats = [
   {
-    value: "100",
+    value: "95+",
     unit: "/100",
     label: "Snelheidsscore",
-    body: "De topscore op de snelheidstest van Google zelf. Dat is het doel voor elke site voor hij live gaat.",
+    body: "Gemeten met de snelheidstest van Google zelf. Dat is de lat voor elke site voor hij live gaat.",
   },
   {
     value: "0",

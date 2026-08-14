@@ -3,9 +3,7 @@ import {
   Code2,
   Gauge,
   MousePointerClick,
-  Palette,
   Search,
-  Sparkles,
   Users,
 } from "lucide-react";
 import Link from "next/link";
@@ -58,8 +56,8 @@ export function Services() {
           description="Op dit moment ligt mijn focus volledig op websites. Zodra ik er de ruimte voor vind, komt daar meer bij, zoals design en branding."
         />
 
-        <div className="mt-14 grid gap-5 lg:grid-cols-3">
-          <Reveal className="lg:col-span-2" scale>
+        <div className="mt-14">
+          <Reveal scale>
             <SpotlightCard className="h-full">
               <div className="flex h-full flex-col p-7 sm:p-9">
                 <div className="flex items-start justify-between gap-4">
@@ -83,7 +81,7 @@ export function Services() {
                   jij het nodig hebt.
                 </p>
 
-                <ul className="mt-7 grid gap-2.5 sm:grid-cols-2">
+                <ul className="mt-7 grid max-w-3xl gap-2.5 sm:grid-cols-2">
                   {deliverables.map((item) => (
                     <li
                       key={item}
@@ -106,38 +104,6 @@ export function Services() {
                     Vraag een prijs
                     <ArrowUpRight className="size-4" />
                   </Link>
-                </div>
-              </div>
-            </SpotlightCard>
-          </Reveal>
-
-          <Reveal delay={0.1} scale>
-            <SpotlightCard className="h-full">
-              <div className="flex h-full flex-col p-7 sm:p-9">
-                <div className="flex items-start justify-between gap-4">
-                  <span className="inline-flex size-11 items-center justify-center rounded-xl border border-neon-alt/25 bg-neon-alt/10 text-neon-alt">
-                    <Palette className="size-5" />
-                  </span>
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-neon-alt/30 bg-neon-alt/10 px-3 py-1 font-mono text-[10px] tracking-[0.18em] text-neon-alt uppercase">
-                    <Sparkles className="size-3" />
-                    Binnenkort
-                  </span>
-                </div>
-
-                <h3 className="mt-6 font-display text-2xl leading-tight font-semibold text-balance">
-                  Logo- en huisstijlontwerp
-                </h3>
-
-                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                  Je logo, kleuren, lettertypes en de manier waarop jouw bedrijf
-                  schrijft. Hier wordt nu aan gewerkt, en het wordt beschikbaar
-                  zodra het net zo goed is als de websites.
-                </p>
-
-                <div className="mt-auto pt-9">
-                  <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 font-mono text-[11px] tracking-[0.14em] text-muted-foreground uppercase">
-                    Uitbreidend aanbod
-                  </span>
                 </div>
               </div>
             </SpotlightCard>
